@@ -1,0 +1,13 @@
+{
+  "name": "liubang/visualonline",
+  "authors": [
+    {
+      "name": "liubang",
+      "email": "it.liubang@gmail.com"
+    }
+  ],
+  "require": {
+    "php": ">=7.0",
+    "catfan/medoo": "^1.5"
+  }
+}
