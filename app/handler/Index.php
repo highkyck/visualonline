@@ -7,8 +7,14 @@ class Index extends Controller
 {
     public function _init()
     {
-        $this->getResponse()
-            ->header('Content-Type', 'application/json;charset=utf-8');
+        $this->getView()
+            ->setScriptPath(\APP_PATH . 'app/view');
+    }
+
+    public function index()
+    {
+        $this->getView()
+            ->display('index/index.phtml');
     }
 
 }

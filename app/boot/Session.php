@@ -9,7 +9,7 @@ class Session implements Bootstrap
 {
     public function bootstrap(Application $application)
     {
-
+        \session_start();
     }
 
 }
