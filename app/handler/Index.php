@@ -13,7 +13,11 @@ class Index extends Controller
 
     public function index()
     {
+        $userId = $this->getRequest()
+            ->getQuery('userId', 100000, 'intval');
+
         $this->getView()
+            ->assign('userId', $userId)
             ->display('index/index.phtml');
     }
 
