@@ -14,6 +14,9 @@ class Router implements Bootstrap
         $application->getRouter()
             ->get('/', Index::class, 'index')
             ->get('/m', Index::class, 'mobile')
-            ->get('/aj/index', Aj::class, 'index');
+            ->get('/aj/getList', Aj::class, 'getList')
+            ->get('/aj/getMembers', Aj::class, 'getMembers')
+            ->post('/aj/upload/image', Aj::class, 'uploadImg')
+            ->post('/aj/upload/file', Aj::class, 'uploadFile');
     }
 }

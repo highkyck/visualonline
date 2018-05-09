@@ -7,20 +7,31 @@ class Aj extends Controller
 {
     protected function _init()
     {
-        if (!$this->getRequest()->isAjax()) {
-            $this->getResponse()
-                ->status(403)
-                ->body("非法请求")
-                ->send();
-        }
         $this->getResponse()
             ->header('Content-Type', 'application/json;charset=utf-8');
     }
 
-    public function index()
+    public function getList()
+    {
+
+    }
+
+    public function getMembers()
+    {
+
+    }
+
+    public function uploadImg()
     {
         $this->getResponse()
-            ->json(['status' => 1, 'data' => 'ok'])
+            ->json(['code' => 0, 'msg' => '', 'data' => ['src' => 'http://tp4.sinaimg.cn/2145291155/180/5601307179/1']])
+            ->send();
+    }
+
+    public function uploadFile()
+    {
+        $this->getResponse()
+            ->json(['code' => 0, 'msg' => '', 'data' => ['src' => 'http://tp4.sinaimg.cn/2145291155/180/5601307179/1']])
             ->send();
     }
 }
