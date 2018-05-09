@@ -13,7 +13,46 @@
 
 <script src="/layui/layui.js"></script>
 <script>
+
     layui.use('layim', function(layim){
+
+        let socket = new WebSocket('ws://192.168.8.11:9501');
+
+        //连接成功时触发
+        socket.onopen = function(){
+            socket.send(JSON.stringify({
+                userId: 1,
+                data: "ok"
+            }));
+        };
+
+        //监听收到的消息
+        socket.onmessage = function(res){
+            console.log(res);
+            let data = JSON.parse(res.data);
+            let obj = {};
+            if(data.type === 'group'){
+                obj = {
+                    username: data.userName
+                    ,avatar: 'http://tp4.sinaimg.cn/2145291155/180/5601307179/1'
+                    ,id: data.userId
+                    ,type: data.type
+                    ,content: data.content
+                }
+            } else {
+                obj = {
+                    username: data.userName
+                    ,avatar: 'http://tp4.sinaimg.cn/2145291155/180/5601307179/1'
+                    ,id: data.userId
+                    ,type: data.type
+                    ,content: data.content
+                };
+                layim.setChatStatus('<span style="color:#FF5722;">在线</span>');
+            }
+
+            console.log(obj);
+            layim.getMessage(obj);
+        };
 
         //演示自动回复
         let autoReplay = [

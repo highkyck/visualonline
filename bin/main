@@ -1,3 +1,42 @@
 #!/usr/bin/env php
+
 <?php
 
+use lib\log\Logger;
+
+define('APP_PATH', realpath(__DIR__ . '/../') . '/');
+$config = require APP_PATH . 'vendor/autoload.php';
+
+spl_autoload_register(function ($className) use ($config) {
+    $classPath = $config['app_directory'] . str_replace('\\', DIRECTORY_SEPARATOR, $className) . '.php';
+    require $classPath;
+}, true);
+
+$config = require APP_PATH . 'conf/config.php';
+$wsConfig = $config['ws_server'];
+
+$server = new swoole\websocket\Server($wsConfig['host'], $wsConfig['port']);
+
+$server->on('open', function (swoole\websocket\Server $server, $request) {
+    echo "server: handshake success with fd{$request->fd}\n";
+
+});
+
+$server->on('message', function (swoole\websocket\Server $server, $frame) {
+    echo "receive from {$frame->fd}:{$frame->data},opcode:{$frame->opcode},fin:{$frame->finish}\n";
+    $server->push($frame->fd, json_encode([
+        'type'     => 'friend',
+        'userId'   => '168168',
+        'userName' => '刘邦',
+        'emmit'    => 'message',
+        'content'  => 'hello world',
+    ]));
+});
+
+$server->on('close', function ($ser, $fd) use ($server) {
+    echo "client {$fd} closed\n";
+
+    $server->push($fd, "用户下线");
+});
+
+$server->start();
