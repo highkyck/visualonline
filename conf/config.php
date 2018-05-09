@@ -2,5 +2,5 @@
 
 return [
     'app_directory' => APP_PATH . 'app',
-    'log_path' => '/data/logs/scripts/',
+    'log_path'      => '/data/logs/scripts/',
 ];
