@@ -17,4 +17,9 @@ class Index extends Controller
             ->display('index/index.phtml');
     }
 
+    public function mobile()
+    {
+        $this->getView()
+            ->display('index/mobile.phtml');
+    }
 }

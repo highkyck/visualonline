@@ -22,7 +22,7 @@ class Logger
         if (!\is_string($content)) {
             $content = \json_encode($content);
         }
-        static::$logs[$file][] = "[" . \date('Y-m-d H:i:s') . "] [{$level}] {$content}" . \PHP_EOL;
+        static::$logs[$file][] = \gethostname() . " - [" . \date('Y-m-d H:i:s') . "] [{$level}] {$content}" . \PHP_EOL;
     }
 
     public static function error($file, $content)

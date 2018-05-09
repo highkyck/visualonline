@@ -13,6 +13,7 @@ class Router implements Bootstrap
     {
         $application->getRouter()
             ->get('/', Index::class, 'index')
+            ->get('/m', Index::class, 'mobile')
             ->get('/aj/index', Aj::class, 'index');
     }
 }
