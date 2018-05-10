@@ -2,6 +2,7 @@
 <?php
 
 use lib\log\Logger;
+use lib\storage\Redis;
 
 define('APP_PATH', realpath(__DIR__ . '/../') . '/');
 $config = require APP_PATH . 'vendor/autoload.php';
@@ -27,15 +28,13 @@ $server->on('message', function (swoole\websocket\Server $server, $frame) {
     switch ($data['action']) {
         case 'open':
             $userId = $data['data']['userId'];
-            $redis = new Redis();
-            $redis->connect('127.0.0.1', 6379);
+            $redis = Redis::instance('queue');
             $redis->set($userId, $frame->fd);
             $redis->close();
             //更新在线状态
             break;
         case 'chat':
-            $redis = new Redis();
-            $redis->connect('127.0.0.1', 6379);
+            $redis = Redis::instance('queue');
             $toFd = $redis->get($data['data']['to']['id']);
             $redis->close();
             $server->push($toFd, json_encode([
@@ -43,7 +42,7 @@ $server->on('message', function (swoole\websocket\Server $server, $frame) {
                 'userId'   => $data['data']['mine']['id'],
                 'userName' => $data['data']['mine']['username'],
                 'avatar'   => $data['data']['mine']['avatar'],
-                'content'  => $data['data']['mine']['content']
+                'content'  => $data['data']['mine']['content'],
             ]));
             break;
     }
