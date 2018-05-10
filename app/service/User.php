@@ -19,12 +19,13 @@ class User extends Base
 
         $result = ['mine' => $mine, 'friend' => []];
         //分组
-        $group = $this->db->get('group', ['uid' => $uid, 'type' => 1]);
+        $group = $this->db->select('group', '*', ['uid' => $uid, 'type' => 1]);
         if (!empty($group)) {
             foreach ($group as &$g) {
                 //查询分组好友
                 $groupFriends = $this->db->select('group_user_map', ['[>]user' => ['uid' => 'id']], ['user.*'],
                     ['group_id' => $g['group_id']]);
+                $this->db->debug();
                 $g['list'] = $groupFriends;
                 $result['friend'][] = $g;
             }
