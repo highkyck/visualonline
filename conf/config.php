@@ -9,18 +9,22 @@ return [
     ],
     'db'            => [
         'im_master' => [
+            'type' => 'mysql',
             'host' => '192.168.8.11',
             'port' => 3306,
             'user' => 'liubang',
             'pass' => 'liubang',
             'name' => 'im',
+            'char' => 'utf8',
         ],
         'im_slave'  => [
+            'type' => 'mysql',
             'host' => '192.168.8.11',
             'port' => 3306,
             'user' => 'liubang',
             'pass' => 'liubang',
             'name' => 'im',
+            'char' => 'utf8',
         ],
     ],
 ];
