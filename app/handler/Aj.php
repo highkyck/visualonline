@@ -1,7 +1,9 @@
 <?php
 namespace handler;
 
+use lib\storage\Db;
 use linger\framework\Controller;
+use service\User;
 
 class Aj extends Controller
 {
@@ -9,11 +11,15 @@ class Aj extends Controller
     {
         $this->getResponse()
             ->header('Content-Type', 'application/json;charset=utf-8');
+        $_SESSION['uid'] = 1;
     }
 
     public function getList()
     {
-
+        $db = Db::instance('im_slave');
+        $service = new User($db);
+        $result = $service->getList($_SESSION['uid']);
+        $this->getResponse()->json($result)->send();
     }
 
     public function getMembers()

@@ -14,7 +14,7 @@ class Index extends Controller
     public function index()
     {
         $userId = $this->getRequest()
-            ->getQuery('userId', 100000, 'intval');
+            ->getQuery('userId', 1, 'intval');
 
         $this->getView()
             ->assign('userId', $userId)

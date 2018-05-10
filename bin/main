@@ -14,6 +14,7 @@ spl_autoload_register(function ($className) use ($config) {
 
 $config = require APP_PATH . 'conf/config.php';
 $wsConfig = $config['ws_server'];
+new linger\framework\Application($config);
 
 $server = new swoole\websocket\Server($wsConfig['host'], $wsConfig['port']);
 
