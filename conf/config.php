@@ -10,7 +10,7 @@ return [
     'db'            => [
         'im_master' => [
             'type' => 'mysql',
-            'host' => '192.168.8.11',
+            'host' => 'dev.db.iliubang.cn',
             'port' => 3306,
             'user' => 'liubang',
             'pass' => 'liubang',
@@ -19,7 +19,7 @@ return [
         ],
         'im_slave'  => [
             'type' => 'mysql',
-            'host' => '192.168.8.11',
+            'host' => 'dev.db.iliubang.cn',
             'port' => 3306,
             'user' => 'liubang',
             'pass' => 'liubang',

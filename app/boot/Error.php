@@ -13,7 +13,7 @@ class Error implements Bootstrap
         Logger::setPath($application->getConfig()->get('log_path'));
 
         \set_exception_handler(function(\Exception $exception) {
-            Logger::error("exception.log", $exception->getMessage() . "\n" . $exception->getTraceAsString());
+            Logger::error("exception.log", $exception->__toString());
         });
 
         \register_shutdown_function(function() {

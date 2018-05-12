@@ -23,16 +23,15 @@ class User extends Base
         if (!empty($group)) {
             foreach ($group as &$g) {
                 //查询分组好友
-                $groupFriends = $this->db->select('group_user_map', ['[>]user' => ['uid' => 'id']], ['user.*'],
+                $groupFriends = $this->db->select('group_user_map', ['[>]user' => ['uid' => 'id']], '*',
                     ['group_id' => $g['group_id']]);
-                $this->db->debug();
                 $g['list'] = $groupFriends;
                 $result['friend'][] = $g;
             }
         }
-
         // 群
-        $groups = $this->db->select('user_group_map', ['[>]group' => 'group_id'], ['group.*'], ['uid' => $uid]);
+        $groups = $this->db->select('user_group_map', ['[>]group' => 'group_id'], ['group.group_id(id)', 'groupname', 'avatar']
+            , ['user_group_map.uid' => $uid, 'group.type' => 2]);
         $result['group'] = $groups;
 
         return $result;
@@ -54,7 +53,7 @@ class User extends Base
         $owner = $this->db->get('user', '*', ['id' => $groupInfo['uid']]);
         $result['owner'] = $owner;
 
-        $groupFriends = $this->db->select('group_user_map', ['[>]user' => ['uid' => 'id']], ['user.*'],
+        $groupFriends = $this->db->select('group_user_map', ['[>]user' => ['uid' => 'id']], '*',
             ['group_id' => $groupInfo['group_id']]);
 
         $result['members'] = \count($groupFriends);
