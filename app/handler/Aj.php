@@ -3,6 +3,7 @@
 namespace handler;
 
 use lib\storage\Db;
+use lib\storage\Redis;
 use linger\framework\Controller;
 use service\User;
 
@@ -10,7 +11,6 @@ class Aj extends Controller
 {
     protected function _init()
     {
-        $_SESSION['uid'] = 1;
         $this->getResponse()
             ->header('Content-Type', 'application/json;charset=utf-8');
         $_SESSION['uid'] = 1;
@@ -45,6 +45,41 @@ class Aj extends Controller
         } catch (\Exception $exception) {
             echo $exception;
         }
+    }
+
+    public function getUserStatus()
+    {
+        $uid = $this->getRequest()->getQuery('id', 0, 'intval');
+        $result = ['code' => 0, 'data' => 0, 'msg' => ''];
+        if ($uid > 0) {
+            $redis = Redis::instance('queue');
+            $userInfo = $redis->hGet('user_info', $uid);
+            $userInfo = \json_decode($userInfo, true);
+            if (!empty($userInfo)) {
+                $result = ['code' => 0, 'data' => $userInfo['status'], 'msg' => ''];
+            }
+        }
+        $this->getResponse()->json($result)->send();
+    }
+
+    public function changeMyStatus()
+    {
+        $status = $this->getRequest()->getPost('status', 'hide', 'trim');
+        $result = ['code' => 0, 'data' => 0, 'msg' => ''];
+        try {
+            $redis = Redis::instance('queue');
+            $userInfo = $redis->hGet('user_info', $_SESSION['uid']);
+            $userInfo = \json_decode($userInfo, true);
+            if (!empty($userInfo)) {
+                $userInfo['status'] = $status;
+                $redis->hSet('user_info', $_SESSION['uid'], \json_encode($userInfo));
+                $result = ['code' => 0, 'data' => 1, 'msg' => ''];
+            }
+        } catch (\Exception $exception) {
+            echo $exception;
+        }
+
+        $this->getResponse()->json($result)->send();
     }
 
     public function uploadImg()

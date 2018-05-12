@@ -4,6 +4,23 @@ namespace service;
 
 class User extends Base
 {
+
+    public function getAllFriends($uid)
+    {
+        //分组
+        $group = $this->db->select('group', '*', ['uid' => $uid, 'type' => 1]);
+        $friends = [];
+        if (!empty($group)) {
+            foreach ($group as &$g) {
+                //查询分组好友
+                $groupFriends = $this->db->select('group_user_map', ['[>]user' => ['uid' => 'id']], '*',
+                    ['group_id' => $g['group_id']]);
+                $friends += $groupFriends;
+            }
+        }
+        return $friends;
+    }
+
     /**
      * 获取好友列表
      * @param $uid
@@ -16,7 +33,7 @@ class User extends Base
         if (empty($mine)) {
             return false;
         }
-
+        $mine['status'] = 'online';
         $result = ['mine' => $mine, 'friend' => []];
         //分组
         $group = $this->db->select('group', '*', ['uid' => $uid, 'type' => 1]);
@@ -60,5 +77,11 @@ class User extends Base
         $result['list'] = $groupFriends;
 
         return $result;
+    }
+
+    public function __destruct()
+    {
+        unset($this->db->pdo);
+        unset($this->db);
     }
 }

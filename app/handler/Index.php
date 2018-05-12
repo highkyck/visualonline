@@ -7,6 +7,7 @@ class Index extends Controller
 {
     public function _init()
     {
+        $_SESSION['uid'] = $this->getRequest()->getQuery('uid', 1, 'intval');
         $this->getView()
             ->setScriptPath(\APP_PATH . 'app/view');
     }
@@ -14,7 +15,7 @@ class Index extends Controller
     public function index()
     {
         $userId = $this->getRequest()
-            ->getQuery('userId', 1, 'intval');
+            ->getQuery('userId', $_SESSION['uid'], 'intval');
 
         $this->getView()
             ->assign('userId', $userId)

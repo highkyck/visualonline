@@ -1,14 +1,15 @@
 #!/usr/bin/env php
 <?php
 
-use lib\log\Logger;
 use lib\storage\Redis;
 
 define('APP_PATH', realpath(__DIR__ . '/../') . '/');
-$config = require APP_PATH . 'vendor/autoload.php';
+require APP_PATH . 'vendor/autoload.php';
+$config = require APP_PATH . 'conf/config.php';
 
 spl_autoload_register(function ($className) use ($config) {
-    $classPath = $config['app_directory'] . str_replace('\\', DIRECTORY_SEPARATOR, $className) . '.php';
+    $classPath = $config['app_directory'] . DIRECTORY_SEPARATOR . str_replace('\\', DIRECTORY_SEPARATOR,
+            $className) . '.php';
     require $classPath;
 }, true);
 
@@ -23,6 +24,26 @@ $server->on('open', function (swoole\websocket\Server $server, $request) {
 
 });
 
+function notifyOnlieStatus(swoole\websocket\Server $server, $uid, $status)
+{
+    try {
+        $userService = new service\User();
+        $friends = $userService->getAllFriends($uid);
+        $redis = Redis::instance('queue');
+        foreach ($friends as $friend) {
+            $fd = $redis->hGet('user_info', $friend['id']);
+            if ($fd > 0) {
+                $server->push($fd, [
+                    'action'   => 'friend_online_status',
+                    'uid'      => $friend['id']
+                ]);
+            }
+        }
+    } catch (Exception $exception) {
+        echo $exception;
+    }
+}
+
 $server->on('message', function (swoole\websocket\Server $server, $frame) {
     echo "receive from {$frame->fd}:{$frame->data},opcode:{$frame->opcode},fin:{$frame->finish}\n";
     $data = json_decode($frame->data, true);
@@ -30,15 +51,18 @@ $server->on('message', function (swoole\websocket\Server $server, $frame) {
         case 'open':
             $userId = $data['data']['userId'];
             $redis = Redis::instance('queue');
-            $redis->set($userId, $frame->fd);
+            $redis->hSet('user_info', $userId, json_encode(['fd' => $frame->fd, 'status' => 'online']));
+            $redis->hSet('fd_user_map', $frame->fd, $userId);
             $redis->close();
-            //更新在线状态
+            //TODO 通知好友上线了
             break;
         case 'chat':
             $redis = Redis::instance('queue');
-            $toFd = $redis->get($data['data']['to']['id']);
+            $userInfo = $redis->hGet('user_info', $data['data']['to']['id']);
+            $userInfo = json_decode($userInfo, true);
             $redis->close();
-            $server->push($toFd, json_encode([
+            $server->push($userInfo['fd'], json_encode([
+                'action'   => 'chat',
                 'type'     => $data['data']['to']['type'],
                 'userId'   => $data['data']['mine']['id'],
                 'userName' => $data['data']['mine']['username'],
@@ -50,9 +74,11 @@ $server->on('message', function (swoole\websocket\Server $server, $frame) {
 });
 
 $server->on('close', function ($ser, $fd) use ($server) {
+    $redis = Redis::instance('queue');
+    $userId = $redis->hGet('fd_user_map', $fd);
+    $redis->hDel('user_info', $userId);
+    $redis->close();
     echo "client {$fd} closed\n";
-
-    $server->push($fd, "用户下线");
 });
 
 $server->start();
