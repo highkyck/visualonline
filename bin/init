@@ -74,6 +74,7 @@ $json = <<<json
 json;
 
 //$db->insert('user', json_decode($json, true));
+
 //$db->insert('group', [
 //    [
 //        'uid'       => 1,
@@ -89,66 +90,66 @@ json;
 //    ],
 //]);
 
-//$db->insert('group', [
-//    [
-//        'uid'       => 2,
-//        'groupname' => '我的好友',
-//        'type'      => 1,
-//    ],
-//    [
-//        'uid'       => 2,
-//        'groupname' => '我的老师',
-//        'type'      => 1,
-//    ],
-//]);
+$db->insert('group', [
+    [
+        'uid'       => 2,
+        'groupname' => '我的好友',
+        'type'      => 1,
+    ],
+    [
+        'uid'       => 2,
+        'groupname' => '我的老师',
+        'type'      => 1,
+    ],
+]);
 
 
-//$db->insert('group_user_map', [
-//    [
-//        'group_id' => 6,
-//        'uid'      => 1,
-//    ],
-//    [
-//        'group_id' => 6,
-//        'uid'      => 3,
-//    ],
-//    [
-//        'group_id' => 6,
-//        'uid'      => 4,
-//    ],
-//    [
-//        'group_id' => 6,
-//        'uid'      => 5,
-//    ],
-//    [
-//        'group_id' => 6,
-//        'uid'      => 6,
-//    ],
-//    [
-//        'group_id' => 7,
-//        'uid'      => 7,
-//    ],
-//    [
-//        'group_id' => 7,
-//        'uid'      => 8,
-//    ],
-//    [
-//        'group_id' => 7,
-//        'uid'      => 9,
-//    ],
-//    [
-//        'group_id' => 7,
-//        'uid'      => 10,
-//    ],
-//    [
-//        'group_id' => 7,
-//        'uid'      => 11,
-//    ],
-//    [
-//        'group_id' => 7,
-//        'uid'      => 12,
-//    ],
-//]);
+$db->insert('group_user_map', [
+    [
+        'group_id' => 6,
+        'uid'      => 1,
+    ],
+    [
+        'group_id' => 6,
+        'uid'      => 3,
+    ],
+    [
+        'group_id' => 6,
+        'uid'      => 4,
+    ],
+    [
+        'group_id' => 6,
+        'uid'      => 5,
+    ],
+    [
+        'group_id' => 6,
+        'uid'      => 6,
+    ],
+    [
+        'group_id' => 7,
+        'uid'      => 7,
+    ],
+    [
+        'group_id' => 7,
+        'uid'      => 8,
+    ],
+    [
+        'group_id' => 7,
+        'uid'      => 9,
+    ],
+    [
+        'group_id' => 7,
+        'uid'      => 10,
+    ],
+    [
+        'group_id' => 7,
+        'uid'      => 11,
+    ],
+    [
+        'group_id' => 7,
+        'uid'      => 12,
+    ],
+]);
 
 $db->insert('user_group_map', [
     [
