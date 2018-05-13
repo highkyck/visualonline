@@ -2,7 +2,7 @@
 
 这是一个IM系统
 
-![效果图](/screenshot/1.png)
+![效果图](/screenshot/2.png)
 
 ### 依赖
 
