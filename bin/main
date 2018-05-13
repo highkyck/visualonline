@@ -76,6 +76,9 @@ function sendMessage(swoole\websocket\Server $server, $data)
             $members = $user->getMembers($data['data']['to']['id']);
             if (!empty($members['list'])) {
                 foreach ($members['list'] as $member) {
+                    if ($member['uid'] == $data['data']['mine']['id']) {
+                        continue;
+                    }
                     $userInfo = $redis->hGet('user_info', $member['uid']);
                     $userInfo = json_decode($userInfo, true);
                     //如果对方用户在线，则推送消息
