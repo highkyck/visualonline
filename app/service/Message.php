@@ -7,13 +7,13 @@ class Message extends Base
     {
         $message = [];
         if (!empty($data['userId'])) {
-            $message['from_id'] = (int)$data['from_id'];
+            $message['from_id'] = (int)$data['userId'];
         } else {
             return false;
         }
 
         if (!empty($data['userName'])) {
-            $message['from_username'] = $data['from_username'];
+            $message['from_username'] = $data['userName'];
         }
 
         if (!empty($data['to_id'])) {
