@@ -67,10 +67,11 @@ function sendMessage(swoole\websocket\Server $server, $data)
             'from_username' => $data['data']['mine']['username'],
             'avatar'        => $data['data']['mine']['avatar'],
             'content'       => $data['data']['mine']['content'],
-            'message_time'  => time() * 1000,
+            'message_time'  => time(),
         ];
 
         if ($data['data']['to']['type'] === 'group') {
+            $message['group_id'] = $data['data']['to']['id'];
             $db = \lib\storage\Db::instance('im_slave');
             $user = new \service\User($db);
             $members = $user->getMembers($data['data']['to']['id']);

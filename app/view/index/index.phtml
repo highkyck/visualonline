@@ -56,10 +56,10 @@
                 obj = {
                     username: data.from_username
                     ,avatar: data.avatar
-                    ,id: data.from_id
+                    ,id: data.group_id
                     ,type: data.type
                     ,content: data.content
-                    ,timestamp: data.message_time
+                    ,timestamp: data.message_time * 1000
                 }
             } else {
                 obj = {
@@ -68,7 +68,7 @@
                     ,id: data.from_id
                     ,type: data.type
                     ,content: data.content
-                    ,timestamp: data.message_time
+                    ,timestamp: data.message_time * 1000
                 };
                 layim.setChatStatus('<span style="color:#FF5722;">在线</span>');
             }

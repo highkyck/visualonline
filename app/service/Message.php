@@ -34,7 +34,7 @@ class Message extends Base
             $message['avatar'] = $data['avatar'];
         }
 
-        $message['message_time'] = time();
+        $message['message_time'] = $data['message_time'];
 
         $message['is_pushed'] = $data['is_pushed'] ?? 0;
 
