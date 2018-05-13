@@ -36,4 +36,8 @@ return [
             'db'   => 0,
         ],
     ],
+    'site'          => [
+        'image' => 'http://im.iliubang.cn',
+        'file'  => 'http://im.iliubang.cn',
+    ],
 ];

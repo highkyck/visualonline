@@ -142,14 +142,15 @@ class Aj extends Controller
         $file = $this->getRequest()->getFile('file');
         if (!empty($file) && isset($file['tmp_name'])) {
             $ext = strrchr($file['name'], '.');
-            $distPath = Application::app()->getConfig()['img_path'] . \date('Y/md/');
+            $config = Application::app()->getConfig();
+            $distPath = $config['img_path'] . \date('Y/md/');
             $dist = $distPath . \md5($file['name'] . \time()) . $ext;
             if (!\is_dir($distPath)) {
                 \mkdir($distPath, 0777, true);
             }
             \move_uploaded_file($file['tmp_name'], $dist);
             $this->getResponse()
-                ->json(['code' => 0, 'msg' => '', 'data' => ['src' => \str_replace(\APP_PATH . 'public', '', $dist)]])
+                ->json(['code' => 0, 'msg' => '', 'data' => ['src' => $config['site']['image'] . \str_replace(\APP_PATH . 'public', '', $dist)]])
                 ->send();
         }
     }
@@ -159,14 +160,15 @@ class Aj extends Controller
         $file = $this->getRequest()->getFile('file');
         if (!empty($file) && isset($file['tmp_name'])) {
             $ext = strrchr($file['name'], '.');
-            $distPath = Application::app()->getConfig()['file_path'] . \date('Y/md/');
+            $config = Application::app()->getConfig();
+            $distPath = $config['file_path'] . \date('Y/md/');
             $dist = $distPath . \md5($file['name'] . \time()) . $ext;
             if (!\is_dir($distPath)) {
                 \mkdir($distPath, 0777, true);
             }
             \move_uploaded_file($file['tmp_name'], $dist);
             $this->getResponse()
-                ->json(['code' => 0, 'msg' => '', 'data' => ['src' => \str_replace(\APP_PATH . 'public', '', $dist)]])
+                ->json(['code' => 0, 'msg' => '', 'data' => ['src' => $config['site']['file'] . \str_replace(\APP_PATH . 'public', '', $dist)]])
                 ->send();
         }
     }
