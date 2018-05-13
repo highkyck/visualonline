@@ -84,7 +84,8 @@ function sendMessage(swoole\websocket\Server $server, $data)
                         $message['is_pushed'] = 1;
                     }
                     $message['to_id'] = $member['uid'];
-
+                    //消息入库
+                    createMessage($message);
                 }
             }
             $redis->close();
