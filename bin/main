@@ -27,18 +27,30 @@ $server->on('open', function (swoole\websocket\Server $server, $request) {
 function notifyOnlieStatus(swoole\websocket\Server $server, $uid, $status)
 {
     try {
-        $userService = new service\User();
+        $db = \lib\storage\Db::instance('im_slave');
+        $userService = new service\User($db);
         $friends = $userService->getAllFriends($uid);
         $redis = Redis::instance('queue');
         foreach ($friends as $friend) {
             $fd = $redis->hGet('user_info', $friend['id']);
             if ($fd > 0) {
                 $server->push($fd, [
-                    'action'   => 'friend_online_status',
-                    'uid'      => $friend['id']
+                    'action' => 'friend_online_status',
+                    'uid'    => $friend['id'],
                 ]);
             }
         }
+    } catch (Exception $exception) {
+        echo $exception;
+    }
+}
+
+function createMessage($message)
+{
+    try {
+        $db = \lib\storage\Db::instance('im_slave');
+        $messageService = new \service\Message($db);
+        $messageService->create($message);
     } catch (Exception $exception) {
         echo $exception;
     }
@@ -61,14 +73,21 @@ $server->on('message', function (swoole\websocket\Server $server, $frame) {
             $userInfo = $redis->hGet('user_info', $data['data']['to']['id']);
             $userInfo = json_decode($userInfo, true);
             $redis->close();
-            $server->push($userInfo['fd'], json_encode([
+            $message = [
                 'action'   => 'chat',
                 'type'     => $data['data']['to']['type'],
                 'userId'   => $data['data']['mine']['id'],
                 'userName' => $data['data']['mine']['username'],
                 'avatar'   => $data['data']['mine']['avatar'],
                 'content'  => $data['data']['mine']['content'],
-            ]));
+            ];
+            //如果对方用户在线，则推送消息
+            if (!empty($userInfo) && !empty($userInfo['fd'])) {
+                $server->push($userInfo['fd'], json_encode($message));
+                $message['is_pushed'] = 1;
+            }
+            //消息入库
+            createMessage($message);
             break;
     }
 });
