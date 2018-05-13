@@ -5,6 +5,11 @@ namespace service;
 class User extends Base
 {
 
+    public function changeSign($uid, $sign)
+    {
+        return $this->db->update('user', ['sign' => $sign], ['id' => $uid]);
+    }
+
     public function getAllFriends($uid)
     {
         //分组

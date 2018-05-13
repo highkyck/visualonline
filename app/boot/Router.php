@@ -20,6 +20,7 @@ class Router implements Bootstrap
             ->get('/aj/getMessage', Aj::class, 'getMessage')
             ->get('/aj/clearAllUnpushed', Aj::class, 'clearAllUnpushed')
             ->post('/aj/changeMyStatus', Aj::class, 'changeMyStatus')
+            ->post('/aj/changeSign', Aj::class, 'changeSign')
             ->post('/aj/upload/image', Aj::class, 'uploadImg')
             ->post('/aj/upload/file', Aj::class, 'uploadFile');
     }

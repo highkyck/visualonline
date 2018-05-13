@@ -22,6 +22,21 @@ class Aj extends Controller
         }
     }
 
+    public function changeSign()
+    {
+        $sign = $this->getRequest()->getPost('sign', '', 'trim');
+        try {
+            $db = Db::instance('im_master');
+            $user = new User($db);
+            $user->changeSign($_SESSION['uid'], $sign);
+            $this->getResponse()
+                ->json(['code' => 0, 'data' => '', 'msg' => ''])
+                ->send();
+        } catch (\Exception $exception) {
+            echo $exception;
+        }
+    }
+
     public function getMessage()
     {
         try {
@@ -39,7 +54,7 @@ class Aj extends Controller
     public function clearAllUnpushed()
     {
         try {
-            $db = Db::instance('im_slave');
+            $db = Db::instance('im_master');
             $message = new Message($db);
             $res = $message->clearAllUnpushed($_SESSION['uid']);
             $this->getResponse()

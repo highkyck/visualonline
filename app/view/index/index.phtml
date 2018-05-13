@@ -159,7 +159,15 @@
 
         //监听签名修改
         layim.on('sign', function(value){
-            //console.log(value);
+            $.ajax({
+                url: '/aj/changeSign',
+                method: 'post',
+                data: {
+                    sign: value
+                },
+                success: function(res) {},
+                error: function(res) {}
+            });
         });
 
         //监听自定义工具栏点击，以添加代码为例
