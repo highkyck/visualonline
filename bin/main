@@ -74,12 +74,12 @@ $server->on('message', function (swoole\websocket\Server $server, $frame) {
             $userInfo = json_decode($userInfo, true);
             $redis->close();
             $message = [
-                'action'   => 'chat',
-                'type'     => $data['data']['to']['type'],
-                'userId'   => $data['data']['mine']['id'],
-                'userName' => $data['data']['mine']['username'],
-                'avatar'   => $data['data']['mine']['avatar'],
-                'content'  => $data['data']['mine']['content'],
+                'action'        => 'chat',
+                'type'          => $data['data']['to']['type'],
+                'from_id'       => $data['data']['mine']['id'],
+                'from_username' => $data['data']['mine']['username'],
+                'avatar'        => $data['data']['mine']['avatar'],
+                'content'       => $data['data']['mine']['content'],
             ];
             //如果对方用户在线，则推送消息
             if (!empty($userInfo) && !empty($userInfo['fd'])) {

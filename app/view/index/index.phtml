@@ -32,7 +32,11 @@
                 url: '/aj/getMessage',
                 method: 'get',
                 success: function(res) {
-                    console.log(res);
+                    if ($.isArray(res.data)) {
+                        $.each(res.data, function(i, row) {
+                            getMessage(row);
+                        });
+                    }
                 },
                 error: function(res) {
                     console.log(res);
@@ -44,17 +48,17 @@
             let obj = {};
             if (data.type === 'group') {
                 obj = {
-                    username: data.userName
+                    username: data.from_username
                     ,avatar: data.avatar
-                    ,id: data.userId
+                    ,id: data.from_id
                     ,type: data.type
                     ,content: data.content
                 }
             } else {
                 obj = {
-                    username: data.userName
+                    username: data.from_username
                     ,avatar: data.avatar
-                    ,id: data.userId
+                    ,id: data.from_id
                     ,type: data.type
                     ,content: data.content
                 };
