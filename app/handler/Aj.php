@@ -87,7 +87,8 @@ class Aj extends Controller
             } else {
                 $db = Db::instance('im_slave');
                 $service = new User($db);
-                $list = $service->getMembers($_SESSION['uid']);
+                // TODO 校验当前用户是否有获取该群的权限
+                $list = $service->getMembers($groupId);
                 $result = ['code' => 0, 'msg' => '', 'data' => $list];
             }
             $this->getResponse()->json($result)->send();
