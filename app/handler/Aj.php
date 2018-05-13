@@ -13,7 +13,12 @@ class Aj extends Controller
     {
         $this->getResponse()
             ->header('Content-Type', 'application/json;charset=utf-8');
-        $_SESSION['uid'] = 1;
+        if (empty($_SESSION['uid'])) {
+            $this->getResponse()
+                ->status(403)
+                ->json(['code' => 403, 'msg' => '请登录', 'data' => ''])
+                ->send();
+        }
     }
 
     public function getList()
@@ -52,11 +57,15 @@ class Aj extends Controller
         $uid = $this->getRequest()->getQuery('id', 0, 'intval');
         $result = ['code' => 0, 'data' => 0, 'msg' => ''];
         if ($uid > 0) {
-            $redis = Redis::instance('queue');
-            $userInfo = $redis->hGet('user_info', $uid);
-            $userInfo = \json_decode($userInfo, true);
-            if (!empty($userInfo)) {
-                $result = ['code' => 0, 'data' => $userInfo['status'], 'msg' => ''];
+            try {
+                $redis = Redis::instance('queue');
+                $userInfo = $redis->hGet('user_info', $uid);
+                $userInfo = \json_decode($userInfo, true);
+                if (!empty($userInfo)) {
+                    $result = ['code' => 0, 'data' => $userInfo['status'], 'msg' => ''];
+                }
+            } catch (\Exception $exception) {
+                echo $exception;
             }
         }
         $this->getResponse()->json($result)->send();

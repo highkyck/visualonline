@@ -17,7 +17,7 @@
 
     layui.use('layim', function(layim){
 
-        let socket = new WebSocket('ws://192.168.8.11:9501');
+        let socket = new WebSocket('<?=$ws?>');
 
         //连接成功时触发
         socket.onopen = function(){

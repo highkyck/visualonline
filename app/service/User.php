@@ -41,7 +41,7 @@ class User extends Base
             foreach ($group as &$g) {
                 //查询分组好友
                 $groupFriends = $this->db->select('group_user_map', ['[>]user' => ['uid' => 'id']], '*',
-                    ['group_id' => $g['group_id']]);
+                    ['group_id' => $g['group_id'] , 'user.id[!]' => $uid]);
                 $g['list'] = $groupFriends;
                 $result['friend'][] = $g;
             }
