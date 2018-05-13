@@ -5,6 +5,7 @@ namespace handler;
 use lib\storage\Db;
 use lib\storage\Redis;
 use linger\framework\Controller;
+use service\Message;
 use service\User;
 
 class Aj extends Controller
@@ -18,6 +19,20 @@ class Aj extends Controller
                 ->status(403)
                 ->json(['code' => 403, 'msg' => '请登录', 'data' => ''])
                 ->send();
+        }
+    }
+
+    public function getMessage()
+    {
+        try {
+            $db = Db::instance('im_slave');
+            $message = new Message($db);
+            $res = $message->getUnPushedMessage($_SESSION['uid']);
+            $this->getResponse()
+                ->json(['code' => 0, 'data' => $res, 'msg' => ''])
+                ->send();
+        } catch (\Exception $exception) {
+            echo $exception;
         }
     }
 

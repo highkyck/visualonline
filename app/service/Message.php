@@ -41,4 +41,9 @@ class Message extends Base
         $this->db->insert('message', $message);
         return $this->db->id();
     }
+
+    public function getUnPushedMessage($uid)
+    {
+        return $this->db->select('message', '*', ['to_id' => $uid, 'is_pushed' => 0]);
+    }
 }

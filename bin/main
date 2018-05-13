@@ -48,7 +48,7 @@ function notifyOnlieStatus(swoole\websocket\Server $server, $uid, $status)
 function createMessage($message)
 {
     try {
-        $db = \lib\storage\Db::instance('im_slave');
+        $db = \lib\storage\Db::instance('im_master');
         $messageService = new \service\Message($db);
         $messageService->create($message);
     } catch (Exception $exception) {
