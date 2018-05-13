@@ -128,29 +128,6 @@ $server->on('message', function (swoole\websocket\Server $server, $frame) {
             break;
         case 'chat':
             sendMessage($server, $data);
-            /*
-            $redis = Redis::instance('queue');
-            $userInfo = $redis->hGet('user_info', $data['data']['to']['id']);
-            $userInfo = json_decode($userInfo, true);
-            $redis->close();
-            $message = [
-                'action'        => 'chat',
-                'type'          => $data['data']['to']['type'],
-                'from_id'       => $data['data']['mine']['id'],
-                'from_username' => $data['data']['mine']['username'],
-                'avatar'        => $data['data']['mine']['avatar'],
-                'content'       => $data['data']['mine']['content'],
-                'message_time'  => time() * 1000,
-            ];
-            //如果对方用户在线，则推送消息
-            if (!empty($userInfo) && !empty($userInfo['fd'])) {
-                $server->push($userInfo['fd'], json_encode($message));
-                $message['is_pushed'] = 1;
-            }
-            $message['to_id'] = $data['data']['to']['id'];
-            //消息入库
-            createMessage($message);
-            */
             break;
     }
 });
