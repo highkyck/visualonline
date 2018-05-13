@@ -80,6 +80,7 @@ $server->on('message', function (swoole\websocket\Server $server, $frame) {
                 'from_username' => $data['data']['mine']['username'],
                 'avatar'        => $data['data']['mine']['avatar'],
                 'content'       => $data['data']['mine']['content'],
+                'message_time'  => time() * 1000,
             ];
             //如果对方用户在线，则推送消息
             if (!empty($userInfo) && !empty($userInfo['fd'])) {

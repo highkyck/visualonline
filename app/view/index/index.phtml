@@ -59,6 +59,7 @@
                     ,id: data.from_id
                     ,type: data.type
                     ,content: data.content
+                    ,timestamp: data.message_time
                 }
             } else {
                 obj = {
@@ -67,6 +68,7 @@
                     ,id: data.from_id
                     ,type: data.type
                     ,content: data.content
+                    ,timestamp: data.message_time
                 };
                 layim.setChatStatus('<span style="color:#FF5722;">在线</span>');
             }
