@@ -149,7 +149,7 @@ class Aj extends Controller
             }
             \move_uploaded_file($file['tmp_name'], $dist);
             $this->getResponse()
-                ->json(['code' => 0, 'msg' => '', 'data' => ['src' => $dist]])
+                ->json(['code' => 0, 'msg' => '', 'data' => ['src' => \str_replace(\APP_PATH . 'public', '', $dist)]])
                 ->send();
         }
     }
@@ -166,7 +166,7 @@ class Aj extends Controller
             }
             \move_uploaded_file($file['tmp_name'], $dist);
             $this->getResponse()
-                ->json(['code' => 0, 'msg' => '', 'data' => ['src' => $dist]])
+                ->json(['code' => 0, 'msg' => '', 'data' => ['src' => \str_replace(\APP_PATH . 'public', '', $dist)]])
                 ->send();
         }
     }
