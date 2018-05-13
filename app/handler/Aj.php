@@ -4,6 +4,7 @@ namespace handler;
 
 use lib\storage\Db;
 use lib\storage\Redis;
+use linger\framework\Application;
 use linger\framework\Controller;
 use service\Message;
 use service\User;
@@ -138,15 +139,35 @@ class Aj extends Controller
 
     public function uploadImg()
     {
-        $this->getResponse()
-            ->json(['code' => 0, 'msg' => '', 'data' => ['src' => 'http://tp4.sinaimg.cn/2145291155/180/5601307179/1']])
-            ->send();
+        $file = $this->getRequest()->getFile('file');
+        if (!empty($file) && isset($file['tmp_name'])) {
+            $ext = strrchr($file['name'], '.');
+            $distPath = Application::app()->getConfig()['img_path'] . \date('Y/md/');
+            $dist = $distPath . \md5($file['name'] . \time()) . $ext;
+            if (!\is_dir($distPath)) {
+                \mkdir($distPath, 0777, true);
+            }
+            \move_uploaded_file($file['tmp_name'], $dist);
+            $this->getResponse()
+                ->json(['code' => 0, 'msg' => '', 'data' => ['src' => $dist]])
+                ->send();
+        }
     }
 
     public function uploadFile()
     {
-        $this->getResponse()
-            ->json(['code' => 0, 'msg' => '', 'data' => ['src' => 'http://tp4.sinaimg.cn/2145291155/180/5601307179/1']])
-            ->send();
+        $file = $this->getRequest()->getFile('file');
+        if (!empty($file) && isset($file['tmp_name'])) {
+            $ext = strrchr($file['name'], '.');
+            $distPath = Application::app()->getConfig()['file_path'] . \date('Y/md/');
+            $dist = $distPath . \md5($file['name'] . \time()) . $ext;
+            if (!\is_dir($distPath)) {
+                \mkdir($distPath, 0777, true);
+            }
+            \move_uploaded_file($file['tmp_name'], $dist);
+            $this->getResponse()
+                ->json(['code' => 0, 'msg' => '', 'data' => ['src' => $dist]])
+                ->send();
+        }
     }
 }

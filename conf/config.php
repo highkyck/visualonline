@@ -7,6 +7,8 @@ return [
         'host' => 'dev.ws.iliubang.cn',
         'port' => '9501',
     ],
+    'img_path'      => APP_PATH . 'public/data/image/',
+    'file_path'     => APP_PATH . 'public/data/file/',
     'db'            => [
         'im_master' => [
             'type' => 'mysql',

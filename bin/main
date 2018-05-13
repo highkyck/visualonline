@@ -21,7 +21,6 @@ $server = new swoole\websocket\Server($wsConfig['host'], $wsConfig['port']);
 
 $server->on('open', function (swoole\websocket\Server $server, $request) {
     echo "server: handshake success with fd{$request->fd}\n";
-
 });
 
 function notifyOnlieStatus(swoole\websocket\Server $server, $uid, $status)
