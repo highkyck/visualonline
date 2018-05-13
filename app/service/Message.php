@@ -1,4 +1,5 @@
 <?php
+
 namespace service;
 
 class Message extends Base
@@ -33,6 +34,8 @@ class Message extends Base
         if (!empty($data['avatar'])) {
             $message['avatar'] = $data['avatar'];
         }
+
+        $message['group_id'] = $data['group_id'] ?? 0;
 
         $message['message_time'] = $data['message_time'];
 
