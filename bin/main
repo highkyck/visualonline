@@ -56,6 +56,57 @@ function createMessage($message)
     }
 }
 
+function sendMessage(swoole\websocket\Server $server, $data)
+{
+    try {
+        $redis = Redis::instance('queue');
+        $message = [
+            'action'        => 'chat',
+            'type'          => $data['data']['to']['type'],
+            'from_id'       => $data['data']['mine']['id'],
+            'from_username' => $data['data']['mine']['username'],
+            'avatar'        => $data['data']['mine']['avatar'],
+            'content'       => $data['data']['mine']['content'],
+            'message_time'  => time() * 1000,
+        ];
+
+        if ($data['data']['to']['type'] === 'group') {
+            $db = \lib\storage\Db::instance('im_slave');
+            $user = new \service\User($db);
+            $members = $user->getMembers($data['data']['to']['id']);
+            if (!empty($members['list'])) {
+                foreach ($members['list'] as $member) {
+                    $userInfo = $redis->hGet('user_info', $member['uid']);
+                    $userInfo = json_decode($userInfo, true);
+                    //如果对方用户在线，则推送消息
+                    if (!empty($userInfo) && !empty($userInfo['fd'])) {
+                        $server->push($userInfo['fd'], json_encode($message));
+                        $message['is_pushed'] = 1;
+                    }
+                    $message['to_id'] = $member['uid'];
+
+                }
+            }
+            $redis->close();
+        } else {
+            $userInfo = $redis->hGet('user_info', $data['data']['to']['id']);
+            $userInfo = json_decode($userInfo, true);
+            $redis->close();
+
+            //如果对方用户在线，则推送消息
+            if (!empty($userInfo) && !empty($userInfo['fd'])) {
+                $server->push($userInfo['fd'], json_encode($message));
+                $message['is_pushed'] = 1;
+            }
+            $message['to_id'] = $data['data']['to']['id'];
+            //消息入库
+            createMessage($message);
+        }
+    } catch (Exception $exception) {
+        echo $exception;
+    }
+}
+
 $server->on('message', function (swoole\websocket\Server $server, $frame) {
     echo "receive from {$frame->fd}:{$frame->data},opcode:{$frame->opcode},fin:{$frame->finish}\n";
     $data = json_decode($frame->data, true);
@@ -69,6 +120,8 @@ $server->on('message', function (swoole\websocket\Server $server, $frame) {
             //TODO 通知好友上线了
             break;
         case 'chat':
+            sendMessage($server, $data);
+            /*
             $redis = Redis::instance('queue');
             $userInfo = $redis->hGet('user_info', $data['data']['to']['id']);
             $userInfo = json_decode($userInfo, true);
@@ -90,6 +143,7 @@ $server->on('message', function (swoole\websocket\Server $server, $frame) {
             $message['to_id'] = $data['data']['to']['id'];
             //消息入库
             createMessage($message);
+            */
             break;
     }
 });
