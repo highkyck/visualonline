@@ -6,13 +6,13 @@ class Message extends Base
     public function create($data)
     {
         $message = [];
-        if (!empty($data['from_id'])) {
+        if (!empty($data['userId'])) {
             $message['from_id'] = (int)$data['from_id'];
         } else {
             return false;
         }
 
-        if (!empty($data['from_username'])) {
+        if (!empty($data['userName'])) {
             $message['from_username'] = $data['from_username'];
         }
 

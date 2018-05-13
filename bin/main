@@ -86,6 +86,7 @@ $server->on('message', function (swoole\websocket\Server $server, $frame) {
                 $server->push($userInfo['fd'], json_encode($message));
                 $message['is_pushed'] = 1;
             }
+            $message['to_id'] = $data['data']['to']['id'];
             //消息入库
             createMessage($message);
             break;
