@@ -83,8 +83,9 @@ function sendMessage(swoole\websocket\Server $server, $data)
                     $userInfo = json_decode($userInfo, true);
                     //如果对方用户在线，则推送消息
                     if (!empty($userInfo) && !empty($userInfo['fd'])) {
-                        $server->push($userInfo['fd'], json_encode($message));
-                        $message['is_pushed'] = 1;
+                        if ($server->push($userInfo['fd'], json_encode($message))) {
+                            $message['is_pushed'] = 1;
+                        }
                     }
                     $message['to_id'] = $member['uid'];
                     //消息入库
@@ -99,8 +100,9 @@ function sendMessage(swoole\websocket\Server $server, $data)
 
             //如果对方用户在线，则推送消息
             if (!empty($userInfo) && !empty($userInfo['fd'])) {
-                $server->push($userInfo['fd'], json_encode($message));
-                $message['is_pushed'] = 1;
+                if ($server->push($userInfo['fd'], json_encode($message))) {
+                    $message['is_pushed'] = 1;
+                }
             }
             $message['to_id'] = $data['data']['to']['id'];
             //消息入库
