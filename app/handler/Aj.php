@@ -36,6 +36,20 @@ class Aj extends Controller
         }
     }
 
+    public function clearAllUnpushed()
+    {
+        try {
+            $db = Db::instance('im_slave');
+            $message = new Message($db);
+            $res = $message->clearAllUnpushed($_SESSION['uid']);
+            $this->getResponse()
+                ->json(['code' => 0, 'data' => $res, 'msg' => ''])
+                ->send();
+        } catch (\Exception $exception) {
+            echo $exception;
+        }
+    }
+
     public function getList()
     {
         try {

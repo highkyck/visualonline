@@ -46,4 +46,9 @@ class Message extends Base
     {
         return $this->db->select('message', '*', ['to_id' => $uid, 'is_pushed' => 0]);
     }
+
+    public function clearAllUnpushed($uid)
+    {
+        return $this->db->update('message', ['is_pushed' => 1], ['to_id' => $uid, 'is_pushed' => 0]);
+    }
 }

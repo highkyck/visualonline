@@ -18,6 +18,7 @@ class Router implements Bootstrap
             ->get('/aj/getMembers', Aj::class, 'getMembers')
             ->get('/aj/getUserStatus', Aj::class, 'getUserStatus')
             ->get('/aj/getMessage', Aj::class, 'getMessage')
+            ->get('/aj/clearAllUnpushed', Aj::class, 'clearAllUnpushed')
             ->post('/aj/changeMyStatus', Aj::class, 'changeMyStatus')
             ->post('/aj/upload/image', Aj::class, 'uploadImg')
             ->post('/aj/upload/file', Aj::class, 'uploadFile');

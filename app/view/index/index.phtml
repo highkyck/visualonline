@@ -36,6 +36,12 @@
                         $.each(res.data, function(i, row) {
                             getMessage(row);
                         });
+                        $.ajax({
+                            url: '/aj/clearAllUnpushed',
+                            method: 'get',
+                            success: function(res) {},
+                            error: function(res) {}
+                        });
                     }
                 },
                 error: function(res) {
