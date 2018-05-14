@@ -4,6 +4,7 @@ namespace boot;
 
 use handler\Aj;
 use handler\Index;
+use handler\Login;
 use linger\framework\Application;
 use linger\framework\Bootstrap;
 
@@ -14,6 +15,8 @@ class Router implements Bootstrap
         $application->getRouter()
             ->get('/', Index::class, 'index')
             ->get('/m', Index::class, 'mobile')
+            ->get('/login', Login::class, 'login')
+            ->get('/reg', Login::class, 'reg')
             ->get('/aj/getList', Aj::class, 'getList')
             ->get('/aj/getMembers', Aj::class, 'getMembers')
             ->get('/aj/getUserStatus', Aj::class, 'getUserStatus')

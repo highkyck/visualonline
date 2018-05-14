@@ -150,7 +150,11 @@ class Aj extends Controller
             }
             \move_uploaded_file($file['tmp_name'], $dist);
             $this->getResponse()
-                ->json(['code' => 0, 'msg' => '', 'data' => ['src' => $config['site']['image'] . \str_replace(\APP_PATH . 'public', '', $dist)]])
+                ->json([
+                    'code' => 0,
+                    'msg'  => '',
+                    'data' => ['src' => $config['site']['image'] . \str_replace(\APP_PATH . 'public', '', $dist)],
+                ])
                 ->send();
         }
     }
@@ -168,7 +172,11 @@ class Aj extends Controller
             }
             \move_uploaded_file($file['tmp_name'], $dist);
             $this->getResponse()
-                ->json(['code' => 0, 'msg' => '', 'data' => ['src' => $config['site']['file'] . \str_replace(\APP_PATH . 'public', '', $dist)]])
+                ->json([
+                    'code' => 0,
+                    'msg'  => '',
+                    'data' => ['src' => $config['site']['file'] . \str_replace(\APP_PATH . 'public', '', $dist)],
+                ])
                 ->send();
         }
     }
