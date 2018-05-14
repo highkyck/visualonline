@@ -9,7 +9,7 @@ class Index extends Controller
     public function _init()
     {
         if (empty($_SESSION['uid'])) {
-            \header("Location:/login");
+            $this->getResponse()->redirect('/login');
         }
         $config = Application::app()->getConfig();
         $this->getView()
