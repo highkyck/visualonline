@@ -12,9 +12,8 @@
 <body>
 
 <script src="/layui/layui.js"></script>
-<script src="//apps.bdimg.com/libs/jquery/2.1.4/jquery.min.js"></script>
+<script src="/js/jquery.min.js"></script>
 <script>
-
     layui.use('layim', function(layim){
 
         let socket = new WebSocket('<?=$ws?>');
@@ -123,7 +122,7 @@
                 ,icon: '&#xe64e;'
             }]
 
-            //,title: 'WebIM' //自定义主面板最小化时的标题
+            ,title: 'WebIM' //自定义主面板最小化时的标题
             //,right: '100px' //主面板相对浏览器右侧距离
             //,minRight: '90px' //聊天面板最小化时相对浏览器右侧距离
             ,initSkin: '5.jpg' //1-5 设置初始背景
