@@ -84,6 +84,11 @@ class User extends Base
         return $result;
     }
 
+    public function getUserInfoByEmail($email)
+    {
+        return $this->db->get('user', "*", ['email' => $email]);
+    }
+
     public function __destruct()
     {
         unset($this->db->pdo);

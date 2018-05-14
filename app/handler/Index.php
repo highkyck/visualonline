@@ -8,10 +8,9 @@ class Index extends Controller
 {
     public function _init()
     {
-        //$_SESSION['uid'] = $this->getRequest()->getQuery('uid', 1, 'intval');
-//        if (empty($_SESSION['uid'])) {
-//            \header("Location:/login");
-//        }
+        if (empty($_SESSION['uid'])) {
+            \header("Location:/login");
+        }
         $config = Application::app()->getConfig();
         $this->getView()
             ->setScriptPath(\APP_PATH . 'app/view')

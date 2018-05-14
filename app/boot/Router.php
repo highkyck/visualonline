@@ -16,6 +16,7 @@ class Router implements Bootstrap
             ->get('/', Index::class, 'index')
             ->get('/m', Index::class, 'mobile')
             ->get('/login', Login::class, 'login')
+            ->post('/login', Login::class, 'login')
             ->get('/reg', Login::class, 'reg')
             ->get('/aj/getList', Aj::class, 'getList')
             ->get('/aj/getMembers', Aj::class, 'getMembers')
