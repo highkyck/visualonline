@@ -4,7 +4,7 @@ return [
     'app_directory' => APP_PATH . 'app',
     'log_path'      => '/data/logs/scripts/',
     'ws_server'     => [
-        'host' => 'dev.ws.iliubang.cn',
+        'host' => '140.143.226.211',
         'port' => '9501',
     ],
     'img_path'      => APP_PATH . 'public/data/image/',
