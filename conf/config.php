@@ -4,8 +4,11 @@ return [
     'app_directory' => APP_PATH . 'app',
     'log_path'      => '/data/logs/scripts/',
     'ws_server'     => [
-        'host' => 'ws.im.iliubang.cn',
-        'port' => '80',
+        'host' => '127.0.0.1',
+        'port' => '9095',
+    ],
+    'server' => [
+        'ws' => 'ws://ws.im.iliubang.cn:80'
     ],
     'img_path'      => APP_PATH . 'public/data/image/',
     'file_path'     => APP_PATH . 'public/data/file/',

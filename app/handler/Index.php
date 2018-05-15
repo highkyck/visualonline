@@ -1,4 +1,5 @@
 <?php
+
 namespace handler;
 
 use linger\framework\Application;
@@ -15,7 +16,7 @@ class Index extends Controller
         $this->getView()
             ->setScriptPath(\APP_PATH . 'app/view')
             ->assign('sessionId', \session_id())
-            ->assign('ws', 'ws://' . $config['ws_server']['host'] . ':' . $config['ws_server']['port']);
+            ->assign('ws', $config['server']['ws']);
     }
 
     public function index()
