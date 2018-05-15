@@ -45,6 +45,7 @@
         }
 
         let socket = io('<?=$ws?>', {
+            path: '/',
             autoConnect: true,
             reconnection: true,
             reconnectionDelay: 1000,
