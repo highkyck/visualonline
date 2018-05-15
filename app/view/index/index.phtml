@@ -10,20 +10,18 @@
     </style>
 </head>
 <body>
-
 <script src="/layui/layui.js"></script>
 <script src="/js/jquery.min.js"></script>
 <script>
+    let sessionId = '<?=$sessionId?>';
     layui.use('layim', function(layim){
-
         let socket = new WebSocket('<?=$ws?>');
-
         //连接成功时触发
         socket.onopen = function(){
             socket.send(JSON.stringify({
                 action: 'open',
                 data: {
-                    userId: <?=$userId?>
+                    sessionId: sessionId
                 }
             }));
 
@@ -84,8 +82,10 @@
                     break;
                 case 'friend_online_status':
                     console.log(data);
+                    break;
+                case 'login':
+                    window.location.href = '/login';
             }
-
         };
 
         //基础配置
@@ -189,12 +189,9 @@
         //监听发送消息
         layim.on('sendMessage', function(data){
             let To = data.to;
+            data.sessionId = sessionId;
             console.log(data);
             socket.send(JSON.stringify({action: 'chat', data: data}));
-
-            // if(To.type === 'friend'){
-            //     layim.setChatStatus('<span style="color:#FF5722;">对方正在输入。。。</span>');
-            // }
         });
 
         //监听查看群员

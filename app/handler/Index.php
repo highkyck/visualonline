@@ -14,6 +14,7 @@ class Index extends Controller
         $config = Application::app()->getConfig();
         $this->getView()
             ->setScriptPath(\APP_PATH . 'app/view')
+            ->assign('sessionId', \session_id())
             ->assign('ws', 'ws://' . $config['ws_server']['host'] . ':' . $config['ws_server']['port']);
     }
 

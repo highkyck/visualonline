@@ -30,11 +30,20 @@ return [
         ],
     ],
     'redis'         => [
-        'queue' => [
+        'queue'   => [
             'host' => '127.0.0.1',
             'port' => 6379,
             'db'   => 0,
         ],
+        'session' => [
+            'host' => '127.0.0.1',
+            'port' => 6379,
+            'db'   => 0,
+        ],
+    ],
+    'session'       => [
+        'gc'     => 86400,
+        'domain' => 'iliubang.cn',
     ],
     'site'          => [
         'image' => 'http://im.iliubang.cn',

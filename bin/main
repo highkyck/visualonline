@@ -55,6 +55,19 @@ function createMessage($message)
     }
 }
 
+function sessionGetById($sessionId)
+{
+    try {
+        $redis = Redis::instance('session');
+        $session = $redis->get('PHPREDIS_SESSION:' . $sessionId);
+        $redis->close();
+        return unserialize($session);
+    } catch (Exception $exception) {
+        ;;
+    }
+    return false;
+}
+
 function sendMessage(swoole\websocket\Server $server, $data)
 {
     try {
@@ -116,18 +129,23 @@ function sendMessage(swoole\websocket\Server $server, $data)
 $server->on('message', function (swoole\websocket\Server $server, $frame) {
     echo "receive from {$frame->fd}:{$frame->data},opcode:{$frame->opcode},fin:{$frame->finish}\n";
     $data = json_decode($frame->data, true);
-    switch ($data['action']) {
-        case 'open':
-            $userId = $data['data']['userId'];
-            $redis = Redis::instance('queue');
-            $redis->hSet('user_info', $userId, json_encode(['fd' => $frame->fd, 'status' => 'online']));
-            $redis->hSet('fd_user_map', $frame->fd, $userId);
-            $redis->close();
-            //TODO 通知好友上线了
-            break;
-        case 'chat':
-            sendMessage($server, $data);
-            break;
+    $sessionId = $data['data']['sessionId'];
+    $session = sessionGetById($sessionId);
+    if (empty($session) || empty($session['uid'])) {
+        $server->push($frame->fd, json_encode(['action' => 'login', 'code' => '1000', 'msg' => '请登录']));
+    } else {
+        switch ($data['action']) {
+            case 'open':
+                $redis = Redis::instance('queue');
+                $redis->hSet('user_info', $session['uid'], json_encode(['fd' => $frame->fd, 'status' => 'online']));
+                $redis->hSet('fd_user_map', $frame->fd, $session['uid']);
+                $redis->close();
+                //TODO 通知好友上线了
+                break;
+            case 'chat':
+                sendMessage($server, $data);
+                break;
+        }
     }
 });
 
@@ -135,6 +153,7 @@ $server->on('close', function ($ser, $fd) use ($server) {
     $redis = Redis::instance('queue');
     $userId = $redis->hGet('fd_user_map', $fd);
     $redis->hDel('user_info', $userId);
+    $redis->hDel('fd_user_map', $fd);
     $redis->close();
     echo "client {$fd} closed\n";
 });
