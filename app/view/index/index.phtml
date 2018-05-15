@@ -12,10 +12,11 @@
 <body>
 <script src="/layui/layui.js"></script>
 <script src="/js/jquery.min.js"></script>
+<script src="/js/reconnecting-websocket.min.js"></script>
 <script>
     let sessionId = '<?=$sessionId?>';
     layui.use('layim', function(layim){
-        let socket = new WebSocket('<?=$ws?>');
+        let socket = new ReconnectingWebSocket('<?=$ws?>', null, {debug:true,reconnectInterval:1000});
         //连接成功时触发
         socket.onopen = function(){
             socket.send(JSON.stringify({
@@ -86,6 +87,10 @@
                 case 'login':
                     window.location.href = '/login';
             }
+        };
+
+        socket.onclose = function() {
+
         };
 
         //基础配置

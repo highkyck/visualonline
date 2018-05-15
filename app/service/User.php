@@ -2,6 +2,8 @@
 
 namespace service;
 
+use lib\storage\Redis;
+
 class User extends Base
 {
 
@@ -30,6 +32,7 @@ class User extends Base
      * 获取好友列表
      * @param $uid
      * @return array|bool
+     * @throws \Exception
      */
     public function getList($uid)
     {
@@ -42,11 +45,21 @@ class User extends Base
         $result = ['mine' => $mine, 'friend' => []];
         //分组
         $group = $this->db->select('group', '*', ['uid' => $uid, 'type' => 1]);
+        $redis = Redis::instance('queue');
         if (!empty($group)) {
             foreach ($group as &$g) {
                 //查询分组好友
                 $groupFriends = $this->db->select('group_user_map', ['[>]user' => ['uid' => 'id']], '*',
                     ['group_id' => $g['group_id'] , 'user.id[!]' => $uid]);
+                foreach ($groupFriends as &$friend) {
+                    $userInfo = $redis->hGet('user_info', $friend['uid']);
+                    $userInfo = \json_decode($userInfo, true);
+                    if (empty($userInfo) && isset($userInfo['status'])) {
+                        $friend['status'] = $userInfo['status'];
+                    } else {
+                        $friend['status'] = 'offline';
+                    }
+                }
                 $g['list'] = $groupFriends;
                 $result['friend'][] = $g;
             }
