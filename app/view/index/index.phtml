@@ -12,41 +12,11 @@
 <body>
 <script src="/layui/layui.js"></script>
 <script src="/js/jquery.min.js"></script>
-<script src="/js/reconnecting-websocket.min.js"></script>
+<!--<script src="/js/reconnecting-websocket.min.js"></script>-->
+<script src="/js/socket.io.js"></script>
 <script>
     let sessionId = '<?=$sessionId?>';
     layui.use('layim', function(layim){
-        let socket = new ReconnectingWebSocket('<?=$ws?>', null, {debug:true,reconnectInterval:1000});
-        //连接成功时触发
-        socket.onopen = function(){
-            socket.send(JSON.stringify({
-                action: 'open',
-                data: {
-                    sessionId: sessionId
-                }
-            }));
-
-            $.ajax({
-                url: '/aj/getMessage',
-                method: 'get',
-                success: function(res) {
-                    if ($.isArray(res.data)) {
-                        $.each(res.data, function(i, row) {
-                            getMessage(row);
-                        });
-                        $.ajax({
-                            url: '/aj/clearAllUnpushed',
-                            method: 'get',
-                            success: function(res) {},
-                            error: function(res) {}
-                        });
-                    }
-                },
-                error: function(res) {
-                    console.log(res);
-                }
-            });
-        };
 
         function getMessage(data) {
             let obj = {};
@@ -74,8 +44,49 @@
             layim.getMessage(obj);
         }
 
+        let socket = io('<?=$ws?>', {
+            path: '/',
+            transports: ['websocket'],
+            autoConnect: true,
+            reconnection: true,
+            reconnectionDelay: 1000,
+            reconnectionDelayMax : 5000,
+            reconnectionAttempts: Infinity
+        });
+        //let socket = new ReconnectingWebSocket('<?=$ws?>', null, {debug:true,reconnectInterval:1000});
+        //连接成功时触发
+        socket.on('connect', function() {
+            socket.send(JSON.stringify({
+                action: 'open',
+                data: {
+                    sessionId: sessionId
+                }
+            }));
+
+            $.ajax({
+                url: '/aj/getMessage',
+                method: 'get',
+                success: function(res) {
+                    if ($.isArray(res.data)) {
+                        $.each(res.data, function(i, row) {
+                            getMessage(row);
+                        });
+                        $.ajax({
+                            url: '/aj/clearAllUnpushed',
+                            method: 'get',
+                            success: function(res) {},
+                            error: function(res) {}
+                        });
+                    }
+                },
+                error: function(res) {
+                    console.log(res);
+                }
+            });
+        });
+
         //监听收到的消息
-        socket.onmessage = function(res){
+        socket.on('message', function() {
             let data = JSON.parse(res.data);
             switch (data.action) {
                 case 'chat':
@@ -87,11 +98,19 @@
                 case 'login':
                     window.location.href = '/login';
             }
-        };
+        });
 
-        socket.onclose = function() {
+        socket.on('disconnect', function () {
+            console.log("socket disconnect");
+        });
 
-        };
+        socket.on('reconnecting', function () {
+            console.log("socket reconnecting");
+        });
+
+        socket.on('reconnect', function () {
+            console.log("socket reconnect");
+        });
 
         //基础配置
         layim.config({
@@ -188,7 +207,7 @@
 
         //监听layim建立就绪
         layim.on('ready', function(res){
-            //layim.msgbox(5); //模拟消息盒子有新消息，实际使用时，一般是动态获得
+            //layim.msgbox(5);
         });
 
         //监听发送消息
