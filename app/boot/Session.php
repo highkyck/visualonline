@@ -17,7 +17,9 @@ class Session implements Bootstrap
         // 不适用GET/POST变量方式
         ini_set('session.use_trans_sid', 0);
         //设置垃圾回收最大生存时间
-        ini_set('session.gc_maxlifetime', $config['session']['gc']);
+        if (isset($config['session']['gc'])) {
+            ini_set('session.gc_maxlifetime', $config['session']['gc']);
+        }
         //使用 COOKIE 保存 SESSION ID 的方式
         ini_set('session.use_cookies', 1);
         ini_set('session.cookie_path', '/');
