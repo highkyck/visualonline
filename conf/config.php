@@ -8,7 +8,7 @@ return [
         'port' => '9095',
     ],
     'server' => [
-        'ws' => 'wss://ws.im.iliubang.cn:80'
+        'ws' => 'wss://ws.im.iliubang.cn:443'
     ],
     'img_path'      => APP_PATH . 'public/data/image/',
     'file_path'     => APP_PATH . 'public/data/file/',
