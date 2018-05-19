@@ -2,6 +2,8 @@
 
 这是一个IM系统
 
+测试地址：[https://im.iliubang.cn](https://im.iliubang.cn)
+
 ![效果图](/screenshot/1.png)
 
 ### 依赖
