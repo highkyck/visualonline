@@ -45,7 +45,7 @@ return [
         ],
     ],
     'session'       => [
-        'gc'     => 86400,
+        //'gc'     => 86400,
         'domain' => 'iliubang.cn',
     ],
     'site'          => [
