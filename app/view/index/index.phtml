@@ -55,7 +55,8 @@
         });
         //let socket = new ReconnectingWebSocket('<?=$ws?>', null, {debug:true,reconnectInterval:1000});
         //连接成功时触发
-        socket.on('connect', function() {
+        socket.on('connect', () => {
+            console.log("connect");
             socket.send(JSON.stringify({
                 action: 'open',
                 data: {
@@ -86,7 +87,8 @@
         });
 
         //监听收到的消息
-        socket.on('message', function() {
+        socket.on('message', function(res) {
+            console.log("message");
             let data = JSON.parse(res.data);
             switch (data.action) {
                 case 'chat':
@@ -100,16 +102,16 @@
             }
         });
 
-        socket.on('disconnect', function () {
-            console.log("socket disconnect");
+        socket.on('disconnect', (reason) => {
+            console.log("socket disconnect:" + reason);
         });
 
-        socket.on('reconnecting', function () {
-            console.log("socket reconnecting");
+        socket.on('reconnecting', (attemptNumber) => {
+            console.log("socket reconnecting:" + attemptNumber);
         });
 
-        socket.on('reconnect', function () {
-            console.log("socket reconnect");
+        socket.on('reconnect', (attemptNumber) => {
+            console.log("socket reconnect:" + attemptNumber);
         });
 
         //基础配置
