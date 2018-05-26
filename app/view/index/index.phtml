@@ -57,7 +57,7 @@
         //连接成功时触发
         socket.on('connect', () => {
             console.log("connect");
-            socket.send(JSON.stringify({
+            socket.emit('message', JSON.stringify({
                 action: 'open',
                 data: {
                     sessionId: sessionId
@@ -217,7 +217,7 @@
             let To = data.to;
             data.sessionId = sessionId;
             console.log(data);
-            socket.send(JSON.stringify({action: 'chat', data: data}));
+            socket.emit('message', JSON.stringify({action: 'chat', data: data}));
         });
 
         //监听查看群员
