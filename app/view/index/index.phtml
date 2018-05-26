@@ -196,7 +196,7 @@
             let To = data.to;
             data.sessionId = sessionId;
             console.log(data);
-            socket.emit('message', JSON.stringify({action: 'chat', data: data}));
+            socket.send(JSON.stringify({action: 'chat', data: data}));
         });
 
         //监听查看群员
