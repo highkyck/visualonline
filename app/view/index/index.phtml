@@ -12,8 +12,8 @@
 <body>
 <script src="/layui/layui.js"></script>
 <script src="/js/jquery.min.js"></script>
-<!--<script src="/js/reconnecting-websocket.min.js"></script>-->
-<script src="/js/socket.io.js"></script>
+<script src="/js/reconnecting-websocket.min.js"></script>
+<!--<script src="/js/socket.io.js"></script>-->
 <script>
     let sessionId = '<?=$sessionId?>';
     layui.use('layim', function(layim){
@@ -44,20 +44,11 @@
             layim.getMessage(obj);
         }
 
-        let socket = io('<?=$ws?>', {
-            path: '/',
-            transports: ['websocket'],
-            autoConnect: true,
-            reconnection: true,
-            reconnectionDelay: 1000,
-            reconnectionDelayMax : 5000,
-            reconnectionAttempts: Infinity
-        });
-        //let socket = new ReconnectingWebSocket('<?=$ws?>', null, {debug:true,reconnectInterval:1000});
+        let socket = new ReconnectingWebSocket('<?=$ws?>', null, {debug:true,reconnectInterval:1000});
         //连接成功时触发
-        socket.on('connect', () => {
+        socket.onopen = () => {
             console.log("connect");
-            socket.emit('message', JSON.stringify({
+            socket.send(JSON.stringify({
                 action: 'open',
                 data: {
                     sessionId: sessionId
@@ -84,10 +75,10 @@
                     console.log(res);
                 }
             });
-        });
+        };
 
         //监听收到的消息
-        socket.on('message', function(res) {
+        socket.onmessage = (res) => {
             console.log("message");
             let data = JSON.parse(res.data);
             switch (data.action) {
@@ -100,19 +91,7 @@
                 case 'login':
                     window.location.href = '/login';
             }
-        });
-
-        socket.on('disconnect', (reason) => {
-            console.log("socket disconnect:" + reason);
-        });
-
-        socket.on('reconnecting', (attemptNumber) => {
-            console.log("socket reconnecting:" + attemptNumber);
-        });
-
-        socket.on('reconnect', (attemptNumber) => {
-            console.log("socket reconnect:" + attemptNumber);
-        });
+        };
 
         //基础配置
         layim.config({
