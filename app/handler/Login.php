@@ -30,6 +30,10 @@ class Login extends Controller
     {
         $this->getView()
             ->setScriptPath(\APP_PATH . 'app/view');
+
+        if (isset($_SESSION['uid']) && !empty($_SESSION['uid'])) {
+            header("Location:/");
+        }
     }
 
     private static function hashPasswd($pass)
@@ -93,8 +97,6 @@ class Login extends Controller
                     'data'   => '',
                     'msg'    => '用户昵称或邮箱已经被使用'
                 ])->send();
-
-                return false;
             }
 
             $db->insert('user', $user);
