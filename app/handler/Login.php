@@ -73,7 +73,7 @@ class Login extends Controller
 
             $user = [
                 'username' => $username,
-                'avatar'   => self::$icons[rand(0, count(self::$icons - 1))],
+                'avatar'   => self::$icons[array_rand(self::$icons, 1)],
                 'sign'     => '测试用户',
                 'email'    => $email,
                 'passwd'   => self::hashPasswd($passwd),
@@ -111,7 +111,8 @@ class Login extends Controller
                 'uid'      => $uid
             ]);
 
-            $this->_response->json([
+            $this->_response->status(200)
+            ->json([
                 'status' => 0,
                 'data'   => '',
                 'msg'    => '注册成功'
