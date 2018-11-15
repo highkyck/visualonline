@@ -43,6 +43,9 @@ class Login extends Controller
     public function reg()
     {
         if ($this->_request->isPost()) {
+            $username = $this->_request->getPost('username', '', 'trim');
+            $email = $this->_request->getPost('email', '', 'trim');
+            $passwd = $this->_request->getPost('passwd', '', 'trim');
 
         } else {
             $this->getView()

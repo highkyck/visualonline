@@ -13,21 +13,27 @@
 <div class="layui-container" style="width: 50%; margin: 50px auto;">
     <form class="layui-form" action="/login", method="post">
         <div class="layui-form-item">
-            <label class="layui-form-label">用户名</label>
+            <label class="layui-form-label">用户昵称</label>
             <div class="layui-input-block">
                 <input type="text" name="username" required  lay-verify="required" placeholder="请输入用户名" autocomplete="off" class="layui-input">
             </div>
         </div>
         <div class="layui-form-item">
-            <label class="layui-form-label">邮  箱</label>
+            <label class="layui-form-label">邮    箱</label>
             <div class="layui-input-block">
                 <input type="text" name="email" required  lay-verify="required" placeholder="请输入邮箱" autocomplete="off" class="layui-input">
             </div>
         </div>
         <div class="layui-form-item">
-            <label class="layui-form-label">密  码</label>
+            <label class="layui-form-label">密    码</label>
             <div class="layui-input-block">
                 <input type="password" name="passwd" required lay-verify="required" placeholder="请输入密码" autocomplete="off" class="layui-input">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">确认密码</label>
+            <div class="layui-input-block">
+                <input type="password" name="rpasswd" required lay-verify="required" placeholder="请输入密码" autocomplete="off" class="layui-input">
             </div>
         </div>
         <div class="layui-form-item">
@@ -40,7 +46,12 @@
 
     <script>
         layui.use('form', function(){
-
+            let form = layui.form;
+            //监听提交
+            form.on('submit(form)', function(data){
+                layer.msg(JSON.stringify(data.field));
+                return false;
+            });
         });
     </script>
 </div>
