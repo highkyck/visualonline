@@ -25,6 +25,7 @@ class User extends Base
                 $friends += $groupFriends;
             }
         }
+
         return $friends;
     }
 
@@ -50,7 +51,7 @@ class User extends Base
             foreach ($group as &$g) {
                 //查询分组好友
                 $groupFriends = $this->db->select('group_user_map', ['[>]user' => ['uid' => 'id']], '*',
-                    ['group_id' => $g['group_id'] , 'user.id[!]' => $uid]);
+                    ['group_id' => $g['group_id'], 'user.id[!]' => $uid]);
                 foreach ($groupFriends as &$friend) {
                     $userInfo = $redis->hGet('user_info', $friend['uid']);
                     $userInfo = \json_decode($userInfo, true);
@@ -65,7 +66,8 @@ class User extends Base
             }
         }
         // 群
-        $groups = $this->db->select('user_group_map', ['[>]group' => 'group_id'], ['group.group_id(id)', 'groupname', 'avatar']
+        $groups = $this->db->select('user_group_map', ['[>]group' => 'group_id'],
+            ['group.group_id(id)', 'groupname', 'avatar']
             , ['user_group_map.uid' => $uid, 'group.type' => 2]);
         $result['group'] = $groups;
 

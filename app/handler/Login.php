@@ -1,4 +1,5 @@
 <?php
+
 namespace handler;
 
 use lib\storage\Db;
@@ -28,7 +29,7 @@ class Login extends Controller
             if (empty($userInfo)) {
                 \header("Location:/login");
             }
-            if (\md5($passw . 'BIGBANG_WEBIM') === $userInfo['passwd']) {
+            if (\md5($passw . SALT) === $userInfo['passwd']) {
                 $_SESSION = $userInfo;
                 $_SESSION['uid'] = $userInfo['id'];
                 \header("Location:/");
@@ -41,7 +42,11 @@ class Login extends Controller
 
     public function reg()
     {
-        $this->getView()
-            ->display('login/reg.phtml');
+        if ($this->_request->isPost()) {
+
+        } else {
+            $this->getView()
+                ->display('login/reg.phtml');
+        }
     }
 }
