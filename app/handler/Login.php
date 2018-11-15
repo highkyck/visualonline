@@ -24,6 +24,8 @@ class Login extends Controller
         'http://tp4.sinaimg.cn/1345566427/180/5730976522/0',
     ];
 
+    private static $defaultGroup = 1;
+
     protected function _init()
     {
         $this->getView()
@@ -96,6 +98,18 @@ class Login extends Controller
             }
 
             $db->insert('user', $user);
+            $uid = $db->id();
+            // 默认将用户加入测试群组中
+
+            $db->insert('group_user_map', [
+                'group_id' => self::$defaultGroup,
+                'uid'      => $uid
+            ]);
+
+            $db->insert('user_group_map', [
+                'group_id' => self::$defaultGroup,
+                'uid'      => $uid
+            ]);
 
             $this->_response->json([
                 'status' => 0,
