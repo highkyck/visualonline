@@ -8,10 +8,11 @@
     <title>webim注册</title>
     <link rel="stylesheet" href="/layui/css/layui.css">
     <script src="/layui/layui.js"></script>
+    <script src="/js/jquery.min.js"></script>
 </head>
 <body>
 <div class="layui-container" style="width: 50%; margin: 50px auto;">
-    <form class="layui-form" action="/login", method="post">
+    <form class="layui-form" method="post">
         <div class="layui-form-item">
             <label class="layui-form-label">用户昵称</label>
             <div class="layui-input-block">
@@ -21,7 +22,7 @@
         <div class="layui-form-item">
             <label class="layui-form-label">邮    箱</label>
             <div class="layui-input-block">
-                <input type="text" name="email" required  lay-verify="required" placeholder="请输入邮箱" autocomplete="off" class="layui-input">
+                <input type="text" name="email" required  lay-verify="required|email" placeholder="请输入邮箱" autocomplete="off" class="layui-input">
             </div>
         </div>
         <div class="layui-form-item">
@@ -49,8 +50,22 @@
             let form = layui.form();
             //监听提交
             form.on('submit(formReg)', function(data){
-                layer.msg(JSON.stringify(data.field));
-                return false;
+                // layer.msg(JSON.stringify(data.field));
+                if (data.field.passwd.trim() !== data.field.rpasswd.trim()) {
+                    layer.msg("两次密码不一致");
+                    return false;
+                } else {
+                    $.ajax({
+                        type: "POST",
+                        url: "/reg",
+                        data: data.field,
+                        success: function() {
+                            layer.msg("注册成功", function() {
+                                window.location.pathname = "/login"
+                            });
+                        }
+                    });
+                }
             });
         });
     </script>
