@@ -73,7 +73,7 @@ class Login extends Controller
 
             $user = [
                 'username' => $username,
-                'avatar'   => array_rand(self::$icons, 1),
+                'avatar'   => self::$icons[rand(0, count(self::$icons - 1))],
                 'sign'     => '测试用户',
                 'email'    => $email,
                 'passwd'   => self::hashPasswd($passwd),
