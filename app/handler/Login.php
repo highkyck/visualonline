@@ -78,10 +78,27 @@ class Login extends Controller
                 'reg_time' => time(),
             ];
 
+            $users = $db->select('user', '*', [
+                'OR' => [
+                    'username' => $username,
+                    'email'    => $email
+                ]
+            ]);
+
+            if (!empty($users)) {
+                $this->_response->json([
+                    'status' => 1,
+                    'data'   => '',
+                    'msg'    => '用户昵称或邮箱已经被使用'
+                ])->send();
+
+                return false;
+            }
+
             $db->insert('user', $user);
 
             $this->_response->json([
-                'status' => '0',
+                'status' => 0,
                 'data'   => '',
                 'msg'    => '注册成功'
             ])->send();

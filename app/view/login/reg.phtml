@@ -59,12 +59,17 @@
                         type: "POST",
                         url: "/reg",
                         data: data.field,
-                        success: function() {
-                            layer.msg("注册成功", function() {
-                                window.location.pathname = "/login"
-                            });
+                        success: function(data) {
+                            if (data.status === 0) {
+                                layer.msg("注册成功", function() {
+                                    window.location.pathname = "/login"
+                                });
+                            } else {
+                                layer.msg(data.msg);
+                            }
                         }
                     });
+                    return false;
                 }
             });
         });
