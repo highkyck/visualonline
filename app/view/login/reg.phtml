@@ -39,20 +39,25 @@
         </div>
         <div class="layui-form-item">
             <div class="layui-input-block">
-                <button class="layui-btn" lay-submit lay-filter="formReg">立即提交</button>
+                <button type="submit" class="layui-btn" lay-submit="" lay-filter="formReg">立即提交</button>
                 <button type="reset" class="layui-btn layui-btn-primary">重置</button>
             </div>
         </div>
     </form>
 
     <script>
-        layui.use('form', function(){
+        layui.use(['form', 'layer'], function(){
             let form = layui.form();
+            let layer = layui.layer;
             //监听提交
             form.on('submit(formReg)', function(data){
+                let index = layer.load(1, {
+                    shade: [0.1,'#fff']
+                });
                 // layer.msg(JSON.stringify(data.field));
                 if (data.field.passwd.trim() !== data.field.rpasswd.trim()) {
-                    layer.msg("两次密码不一致");
+                    layer.close(index);
+                    layer.msg("两次密码不一致", {icon: 5});
                     return false;
                 } else {
                     $.ajax({
@@ -61,14 +66,14 @@
                         data: data.field,
                         success: function(data) {
                             if (data.status === 0) {
-                                layer.msg("注册成功", function() {
-                                    window.location.pathname = "/login"
-                                });
+                                window.location.pathname = "/login";
                             } else {
-                                layer.msg(data.msg);
+                                layer.close(index);
+                                layer.msg(data.msg, {icon: 5});
                             }
                         }
                     });
+
                     return false;
                 }
             });
