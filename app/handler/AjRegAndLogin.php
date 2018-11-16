@@ -47,14 +47,16 @@ class AjRegAndLogin extends Controller
                     'code' => '0',
                     'data' => '',
                     'msg'  => '登录成功'
-                ]);
+                ])
+                ->send();
         } else {
             $this->getResponse()
                 ->json([
                     'code' => '403',
                     'data' => '',
                     'msg'  => '邮箱或密码错误'
-                ]);
+                ])
+                ->send();
         }
     }
 
