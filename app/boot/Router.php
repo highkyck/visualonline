@@ -3,6 +3,7 @@
 namespace boot;
 
 use handler\AjOp;
+use handler\AjRegAndLogin;
 use handler\Index;
 use handler\Login;
 use linger\framework\Application;
@@ -17,8 +18,8 @@ class Router implements Bootstrap
             ->get('/m', Index::class, 'mobile')
             ->get('/login', Login::class, 'login')
             ->get('/reg', Login::class, 'reg')
-            ->post('/aj/login', Login::class, 'login')
-            ->post('/aj/reg', Login::class, 'reg')
+            ->post('/aj/login', AjRegAndLogin::class, 'login')
+            ->post('/aj/reg', AjRegAndLogin::class, 'reg')
             ->get('/aj/getList', AjOp::class, 'getList')
             ->get('/aj/getMembers', AjOp::class, 'getMembers')
             ->get('/aj/getUserStatus', AjOp::class, 'getUserStatus')
