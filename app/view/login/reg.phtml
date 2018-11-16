@@ -70,7 +70,10 @@
                         data: data.field,
                         success: function (data) {
                             if (~~data.code === 1) {
-                                window.location.pathname = "/login";
+                                layer.msg("注册成功", {icon: 6, time: 3}, function() {
+                                    window.location.pathname = "/login";
+                                    return false;
+                                });
                             } else {
                                 layer.close(index);
                                 layer.msg(data.msg, {icon: 5});
