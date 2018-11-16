@@ -11,7 +11,7 @@
 </head>
 <body>
 <div class="layui-container" style="width: 50%; margin: 50px auto;">
-    <form class="layui-form" action="/login", method="post">
+    <form class="layui-form" method="post">
         <div class="layui-form-item">
             <label class="layui-form-label">输入框</label>
             <div class="layui-input-block">
@@ -26,7 +26,7 @@
         </div>
         <div class="layui-form-item">
             <div class="layui-input-block">
-                <button class="layui-btn" lay-submit lay-filter="form">立即提交</button>
+                <button class="layui-btn" lay-submit="" lay-filter="formLogin">立即提交</button>
                 <button type="reset" class="layui-btn layui-btn-primary">重置</button>
                 <a href="/reg" class="layui-btn">注册用户</a>
             </div>
@@ -34,14 +34,31 @@
     </form>
 
     <script>
-        layui.use('form', function(){
+        layui.use(['form', 'layer'], function () {
             let form = layui.form();
+            let layer = layui.layer;
             //监听提交
-            // form.on('submit(form)', function(data){
-            //     console.log(data);
-            //     layer.msg(JSON.stringify(data.field));
-            //     return false;
-            // });
+            form.on('submit(formLogin)', function (data) {
+                let index = layer.load(1, {
+                    shade: [0.1, '#fff']
+                });
+
+                $.ajax({
+                    type: "POST",
+                    url: "/aj/login",
+                    data: data.field,
+                    success: function (data) {
+                        if (data.code === 0) {
+                            window.location.pathname = "/";
+                        } else {
+                            layer.close(index);
+                            layer.msg(data.msg, {icon: 5});
+                        }
+                    }
+                });
+
+                return false;
+            });
         });
     </script>
 </div>

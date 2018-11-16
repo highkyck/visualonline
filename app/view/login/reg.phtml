@@ -16,25 +16,29 @@
         <div class="layui-form-item">
             <label class="layui-form-label">用户昵称</label>
             <div class="layui-input-block">
-                <input type="text" name="username" required  lay-verify="required" placeholder="请输入用户名" autocomplete="off" class="layui-input">
+                <input type="text" name="username" required lay-verify="required" placeholder="请输入用户名"
+                       autocomplete="off" class="layui-input">
             </div>
         </div>
         <div class="layui-form-item">
-            <label class="layui-form-label">邮    箱</label>
+            <label class="layui-form-label">邮 箱</label>
             <div class="layui-input-block">
-                <input type="text" name="email" required  lay-verify="required|email" placeholder="请输入邮箱" autocomplete="off" class="layui-input">
+                <input type="text" name="email" required lay-verify="required|email" placeholder="请输入邮箱"
+                       autocomplete="off" class="layui-input">
             </div>
         </div>
         <div class="layui-form-item">
-            <label class="layui-form-label">密    码</label>
+            <label class="layui-form-label">密 码</label>
             <div class="layui-input-block">
-                <input type="password" name="passwd" required lay-verify="required" placeholder="请输入密码" autocomplete="off" class="layui-input">
+                <input type="password" name="passwd" required lay-verify="required" placeholder="请输入密码"
+                       autocomplete="off" class="layui-input">
             </div>
         </div>
         <div class="layui-form-item">
             <label class="layui-form-label">确认密码</label>
             <div class="layui-input-block">
-                <input type="password" name="rpasswd" required lay-verify="required" placeholder="请输入密码" autocomplete="off" class="layui-input">
+                <input type="password" name="rpasswd" required lay-verify="required" placeholder="请输入密码"
+                       autocomplete="off" class="layui-input">
             </div>
         </div>
         <div class="layui-form-item">
@@ -46,13 +50,13 @@
     </form>
 
     <script>
-        layui.use(['form', 'layer'], function(){
+        layui.use(['form', 'layer'], function () {
             let form = layui.form();
             let layer = layui.layer;
             //监听提交
-            form.on('submit(formReg)', function(data){
+            form.on('submit(formReg)', function (data) {
                 let index = layer.load(1, {
-                    shade: [0.1,'#fff']
+                    shade: [0.1, '#fff']
                 });
                 // layer.msg(JSON.stringify(data.field));
                 if (data.field.passwd.trim() !== data.field.rpasswd.trim()) {
@@ -62,10 +66,10 @@
                 } else {
                     $.ajax({
                         type: "POST",
-                        url: "/reg",
+                        url: "/aj/reg",
                         data: data.field,
-                        success: function(data) {
-                            if (data.status === 0) {
+                        success: function (data) {
+                            if (data.code === 1) {
                                 window.location.pathname = "/login";
                             } else {
                                 layer.close(index);

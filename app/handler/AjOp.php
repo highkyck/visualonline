@@ -9,7 +9,7 @@ use linger\framework\Controller;
 use service\Message;
 use service\User;
 
-class Aj extends Controller
+class AjOp extends Controller
 {
     protected function _init()
     {

@@ -6,6 +6,53 @@ use lib\storage\Redis;
 
 class User extends Base
 {
+    private static $defaultGroup = 1;
+
+    private static $icons = [
+        'https://tva2.sinaimg.cn/crop.0.0.180.180.180/5db11ff4jw1e8qgp5bmzyj2050050aa8.jpg',
+        'https://tva3.sinaimg.cn/crop.0.0.512.512.180/8693225ajw8f2rt20ptykj20e80e8weu.jpg',
+        'https://tva1.sinaimg.cn/crop.0.0.180.180.180/83d685c5jw1e8qgp5bmzyj2050050aa8.jpg',
+        'https://tva1.sinaimg.cn/crop.0.0.180.180.180/7fde8b93jw1e8qgp5bmzyj2050050aa8.jpg',
+        'https://tva4.sinaimg.cn/crop.0.0.180.180.180/6a4acad5jw1e8qgp5bmzyj2050050aa8.jpg',
+        'https://tva1.sinaimg.cn/crop.0.0.180.180.180/4a02849cjw1e8qgp5bmzyj2050050aa8.jpg',
+        'https://tva1.sinaimg.cn/crop.0.0.180.180.180/86b15b6cjw1e8qgp5bmzyj2050050aa8.jpg',
+    ];
+
+    public static function hashPasswd($pass)
+    {
+        return \md5($pass . SALT);
+    }
+
+    public function regForTest($user)
+    {
+        $users = $this->db->select('user', '*', [
+            'OR' => [
+                'username' => $user['username'],
+                'email'    => $user['email'],
+            ],
+        ]);
+
+        if (!empty($users)) {
+            return $this->error("用户名或邮箱已经存在");
+        }
+
+        $user['avatar'] = static::$icons[array_rand(self::$icons, 1)];
+        $this->db->insert('user', $user);
+        $uid = $this->db->id();
+        // 默认将用户加入测试群组中
+
+        $this->db->insert('group_user_map', [
+            'group_id' => self::$defaultGroup,
+            'uid'      => $uid,
+        ]);
+
+        $this->db->insert('user_group_map', [
+            'group_id' => self::$defaultGroup,
+            'uid'      => $uid,
+        ]);
+
+        return $this->success("注册成功");
+    }
 
     public function changeSign($uid, $sign)
     {

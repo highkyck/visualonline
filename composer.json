@@ -8,6 +8,7 @@
   ],
   "require": {
     "php": ">=7.0",
-    "catfan/medoo": "^1.5"
+    "catfan/medoo": "^1.5",
+    "ext-json": "*"
   }
 }

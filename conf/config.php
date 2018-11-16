@@ -1,18 +1,19 @@
 <?php
 
 return [
-    'app_directory' => APP_PATH . 'app',
-    'log_path'      => '/data/logs/scripts/',
-    'ws_server'     => [
+    'app_directory'  => APP_PATH . 'app',
+    'view_directory' => APP_PATH . 'app/view',
+    'log_path'       => '/data/logs/scripts/',
+    'ws_server'      => [
         'host' => '127.0.0.1',
         'port' => '9095',
     ],
-    'server' => [
+    'server'         => [
         'ws' => 'wss://ws.im.iliubang.cn:443'
     ],
-    'img_path'      => APP_PATH . 'public/data/image/',
-    'file_path'     => APP_PATH . 'public/data/file/',
-    'db'            => [
+    'img_path'       => APP_PATH . 'public/data/image/',
+    'file_path'      => APP_PATH . 'public/data/file/',
+    'db'             => [
         'im_master' => [
             'type' => 'mysql',
             'host' => 'dev.db.iliubang.cn',
@@ -32,7 +33,7 @@ return [
             'char' => 'utf8',
         ],
     ],
-    'redis'         => [
+    'redis'          => [
         'queue'   => [
             'host' => '127.0.0.1',
             'port' => 6379,
@@ -44,11 +45,11 @@ return [
             'db'   => 0,
         ],
     ],
-    'session'       => [
+    'session'        => [
         //'gc'     => 86400,
         'domain' => 'iliubang.cn',
     ],
-    'site'          => [
+    'site'           => [
         'image' => 'http://im.iliubang.cn',
         'file'  => 'http://im.iliubang.cn',
     ],

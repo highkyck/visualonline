@@ -2,7 +2,7 @@
 
 namespace boot;
 
-use handler\Aj;
+use handler\AjOp;
 use handler\Index;
 use handler\Login;
 use linger\framework\Application;
@@ -16,17 +16,17 @@ class Router implements Bootstrap
             ->get('/', Index::class, 'index')
             ->get('/m', Index::class, 'mobile')
             ->get('/login', Login::class, 'login')
-            ->post('/login', Login::class, 'login')
             ->get('/reg', Login::class, 'reg')
-            ->post('/reg', Login::class, 'reg')
-            ->get('/aj/getList', Aj::class, 'getList')
-            ->get('/aj/getMembers', Aj::class, 'getMembers')
-            ->get('/aj/getUserStatus', Aj::class, 'getUserStatus')
-            ->get('/aj/getMessage', Aj::class, 'getMessage')
-            ->get('/aj/clearAllUnpushed', Aj::class, 'clearAllUnpushed')
-            ->post('/aj/changeMyStatus', Aj::class, 'changeMyStatus')
-            ->post('/aj/changeSign', Aj::class, 'changeSign')
-            ->post('/aj/upload/image', Aj::class, 'uploadImg')
-            ->post('/aj/upload/file', Aj::class, 'uploadFile');
+            ->post('/aj/login', Login::class, 'login')
+            ->post('/aj/reg', Login::class, 'reg')
+            ->get('/aj/getList', AjOp::class, 'getList')
+            ->get('/aj/getMembers', AjOp::class, 'getMembers')
+            ->get('/aj/getUserStatus', AjOp::class, 'getUserStatus')
+            ->get('/aj/getMessage', AjOp::class, 'getMessage')
+            ->get('/aj/clearAllUnpushed', AjOp::class, 'clearAllUnpushed')
+            ->post('/aj/changeMyStatus', AjOp::class, 'changeMyStatus')
+            ->post('/aj/changeSign', AjOp::class, 'changeSign')
+            ->post('/aj/upload/image', AjOp::class, 'uploadImg')
+            ->post('/aj/upload/file', AjOp::class, 'uploadFile');
     }
 }
