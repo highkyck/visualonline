@@ -49,7 +49,7 @@
                     url: "/aj/login",
                     data: data.field,
                     success: function (data) {
-                        if (data.code === 0) {
+                        if (~~data.code === 0) {
                             window.location.pathname = "/";
                         } else {
                             layer.close(index);

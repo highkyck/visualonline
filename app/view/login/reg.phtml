@@ -69,7 +69,7 @@
                         url: "/aj/reg",
                         data: data.field,
                         success: function (data) {
-                            if (data.code === 1) {
+                            if (~~data.code === 1) {
                                 window.location.pathname = "/login";
                             } else {
                                 layer.close(index);
