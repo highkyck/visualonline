@@ -8,20 +8,19 @@ use service\User;
 
 class Login extends Controller
 {
-
     private static $icons = [
-        'http://tp1.sinaimg.cn/1571889140/180/40030060651/1',
-        'http://tva3.sinaimg.cn/crop.0.0.512.512.180/8693225ajw8f2rt20ptykj20e80e8weu.jpg',
-        'http://tp2.sinaimg.cn/1833062053/180/5643591594/0',
-        'http://tp4.sinaimg.cn/2145291155/180/5601307179/1',
-        'http://tp2.sinaimg.cn/1783286485/180/5677568891/1',
-        'http://tp1.sinaimg.cn/1241679004/180/5743814375/0',
-        'http://tva1.sinaimg.cn/crop.0.0.180.180.180/86b15b6cjw1e8qgp5bmzyj2050050aa8.jpg',
-        'http://tp1.sinaimg.cn/5286730964/50/5745125631/0',
-        'http://tp4.sinaimg.cn/1665074831/180/5617130952/0',
-        'http://tp2.sinaimg.cn/2518326245/180/5636099025/0',
-        'http://tp3.sinaimg.cn/1223762662/180/5741707953/0',
-        'http://tp4.sinaimg.cn/1345566427/180/5730976522/0',
+        'https://tp1.sinaimg.cn/1571889140/180/40030060651/1',
+        'https://tva3.sinaimg.cn/crop.0.0.512.512.180/8693225ajw8f2rt20ptykj20e80e8weu.jpg',
+        'https://tp2.sinaimg.cn/1833062053/180/5643591594/0',
+        'https://tp4.sinaimg.cn/2145291155/180/5601307179/1',
+        'https://tp2.sinaimg.cn/1783286485/180/5677568891/1',
+        'https://tp1.sinaimg.cn/1241679004/180/5743814375/0',
+        'https://tva1.sinaimg.cn/crop.0.0.180.180.180/86b15b6cjw1e8qgp5bmzyj2050050aa8.jpg',
+        'https://tp1.sinaimg.cn/5286730964/50/5745125631/0',
+        'https://tp4.sinaimg.cn/1665074831/180/5617130952/0',
+        'https://tp2.sinaimg.cn/2518326245/180/5636099025/0',
+        'https://tp3.sinaimg.cn/1223762662/180/5741707953/0',
+        'https://tp4.sinaimg.cn/1345566427/180/5730976522/0',
     ];
 
     private static $defaultGroup = 1;
