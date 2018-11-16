@@ -2,7 +2,10 @@
 
 namespace service;
 
+use lib\log\Logger;
 use lib\storage\Redis;
+use lib\type\GroupType;
+use Medoo\Medoo;
 
 class User extends Base
 {
@@ -37,19 +40,37 @@ class User extends Base
         }
 
         $user['avatar'] = static::$icons[array_rand(self::$icons, 1)];
-        $this->db->insert('user', $user);
-        $uid = $this->db->id();
-        // 默认将用户加入测试群组中
 
-        $this->db->insert('group_user_map', [
-            'group_id' => self::$defaultGroup,
-            'uid'      => $uid,
-        ]);
+        $this->db->action(function (Medoo $db) use ($user) {
+            try {
+                $db->insert('user', $user);
+                $uid = $db->id();
 
-        $this->db->insert('user_group_map', [
-            'group_id' => self::$defaultGroup,
-            'uid'      => $uid,
-        ]);
+                // 默认将用户加入测试群组中
+                $db->insert('group_user_map', [
+                    'group_id' => self::$defaultGroup,
+                    'uid'      => $uid,
+                ]);
+
+                $db->insert('user_group_map', [
+                    'group_id' => self::$defaultGroup,
+                    'uid'      => $uid,
+                ]);
+
+                // 给每个用户添加一个默认的好友分组
+                $db->insert('group', [
+                    'uid'         => $uid,
+                    'groupname'   => '我的好友',
+                    'type'        => GroupType::FRIEND,
+                    'description' => '我的好友',
+                    'avatar'      => static::$icons[0]
+                ]);
+            } catch (\Exception $e) {
+                Logger::error(date('Y/md/') . __METHOD__ . '.log', $e->getMessage()
+                    . "\n" . $e->getTraceAsString());
+                return false;
+            }
+        });
 
         return $this->success("注册成功");
     }

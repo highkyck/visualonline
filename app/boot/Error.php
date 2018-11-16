@@ -17,6 +17,8 @@ class Error implements Bootstrap
         });
 
         \register_shutdown_function(function() {
+            $error = error_clear_last();
+            Logger::error("error.log", json_decode($error));
             Logger::land();
         });
     }
