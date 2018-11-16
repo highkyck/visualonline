@@ -50,7 +50,8 @@
                     data: data.field,
                     success: function (data) {
                         if (~~data.code === 0) {
-                            layer.msg(data.msg, {icon: 6, time: 3}, function() {
+                            layer.close(index);
+                            layer.msg(data.msg, {icon: 6, time: 3000}, function() {
                                 window.location.pathname = "/";
                                 return false;
                             });
