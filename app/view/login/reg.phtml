@@ -71,7 +71,7 @@
                         success: function (data) {
                             if (~~data.code === 1) {
                                 layer.close(index);
-                                layer.msg("注册成功", {icon: 6, time: 1500}, function() {
+                                layer.msg("注册成功", {icon: 6, time: 1000}, function() {
                                     window.location.pathname = "/login";
                                     return false;
                                 });
