@@ -51,7 +51,7 @@
                     success: function (data) {
                         if (~~data.code === 0) {
                             layer.close(index);
-                            layer.msg(data.msg, {icon: 6, time: 3000}, function() {
+                            layer.msg(data.msg, {icon: 6, time: 1500}, function() {
                                 window.location.pathname = "/";
                                 return false;
                             });

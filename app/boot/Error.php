@@ -10,7 +10,7 @@ class Error implements Bootstrap
 {
     public function bootstrap(Application $application)
     {
-        Logger::setPath($application->getConfig()->get('log_path'));
+        Logger::setPath($application->getConfig()->get('log_path') . date('Y/md/'));
 
         \set_exception_handler(function($exception) {
             Logger::error("exception.log", $exception->__toString());

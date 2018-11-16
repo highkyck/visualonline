@@ -15,6 +15,7 @@ class AjOp extends Controller
     {
         $this->getResponse()
             ->header('Content-Type', 'application/json;charset=utf-8');
+
         if (empty($_SESSION['uid'])) {
             $this->getResponse()
                 ->status(403)
@@ -26,76 +27,53 @@ class AjOp extends Controller
     public function changeSign()
     {
         $sign = $this->getRequest()->getPost('sign', '', 'trim');
-        try {
-            $db = Db::instance('im_master');
-            $user = new User($db);
-            $user->changeSign($_SESSION['uid'], $sign);
-            $this->getResponse()
-                ->json(['code' => 0, 'data' => '', 'msg' => ''])
-                ->send();
-        } catch (\Exception $exception) {
-            echo $exception;
-        }
+        $user = new User(Db::instance('im_master'));
+        $user->changeSign($_SESSION['uid'], $sign);
+        $this->getResponse()
+            ->json(['code' => 0, 'data' => '', 'msg' => ''])
+            ->send();
     }
 
     public function getMessage()
     {
-        try {
-            $db = Db::instance('im_slave');
-            $message = new Message($db);
-            $res = $message->getUnPushedMessage($_SESSION['uid']);
-            $this->getResponse()
-                ->json(['code' => 0, 'data' => $res, 'msg' => ''])
-                ->send();
-        } catch (\Exception $exception) {
-            echo $exception;
-        }
+        $message = new Message(Db::instance('im_slave'));
+        $res = $message->getUnPushedMessage($_SESSION['uid']);
+        $this->getResponse()
+            ->json(['code' => 0, 'data' => $res, 'msg' => ''])
+            ->send();
     }
 
     public function clearAllUnpushed()
     {
-        try {
-            $db = Db::instance('im_master');
-            $message = new Message($db);
-            $res = $message->clearAllUnpushed($_SESSION['uid']);
-            $this->getResponse()
-                ->json(['code' => 0, 'data' => $res, 'msg' => ''])
-                ->send();
-        } catch (\Exception $exception) {
-            echo $exception;
-        }
+        $message = new Message(Db::instance('im_master'));
+        $res = $message->clearAllUnpushed($_SESSION['uid']);
+        $this->getResponse()
+            ->json(['code' => 0, 'data' => $res, 'msg' => ''])
+            ->send();
     }
 
     public function getList()
     {
-        try {
-            $db = Db::instance('im_slave');
-            $service = new User($db);
-            $list = $service->getList($_SESSION['uid']);
-            $this->getResponse()->json(['code' => 0, 'data' => $list, 'msg' => ''])->send();
-        } catch (\Exception $exception) {
-            echo $exception;
-        }
-
+        $service = new User(Db::instance('im_slave'));
+        $list = $service->getList($_SESSION['uid']);
+        $this->getResponse()
+            ->json(['code' => 0, 'data' => $list, 'msg' => ''])
+            ->send();
     }
 
     public function getMembers()
     {
-        try {
-            $groupId = $this->getRequest()->getQuery('id', 0, 'intval');
-            if (!$groupId) {
-                $result = ['code' => 1000, 'msg' => '参数错误', 'data' => ''];
-            } else {
-                $db = Db::instance('im_slave');
-                $service = new User($db);
-                // TODO 校验当前用户是否有获取该群的权限
-                $list = $service->getMembers($groupId);
-                $result = ['code' => 0, 'msg' => '', 'data' => $list];
-            }
-            $this->getResponse()->json($result)->send();
-        } catch (\Exception $exception) {
-            echo $exception;
+        $groupId = $this->getRequest()->getQuery('id', 0, 'intval');
+        if (!$groupId) {
+            $result = ['code' => 1000, 'msg' => '参数错误', 'data' => ''];
+        } else {
+            $db = Db::instance('im_slave');
+            $service = new User($db);
+            // TODO 校验当前用户是否有获取该群的权限
+            $list = $service->getMembers($groupId);
+            $result = ['code' => 0, 'msg' => '', 'data' => $list];
         }
+        $this->getResponse()->json($result)->send();
     }
 
     public function getUserStatus()
@@ -121,17 +99,13 @@ class AjOp extends Controller
     {
         $status = $this->getRequest()->getPost('status', 'hide', 'trim');
         $result = ['code' => 0, 'data' => 0, 'msg' => ''];
-        try {
-            $redis = Redis::instance('queue');
-            $userInfo = $redis->hGet('user_info', $_SESSION['uid']);
-            $userInfo = \json_decode($userInfo, true);
-            if (!empty($userInfo)) {
-                $userInfo['status'] = $status;
-                $redis->hSet('user_info', $_SESSION['uid'], \json_encode($userInfo));
-                $result = ['code' => 0, 'data' => 1, 'msg' => ''];
-            }
-        } catch (\Exception $exception) {
-            echo $exception;
+        $redis = Redis::instance('queue');
+        $userInfo = $redis->hGet('user_info', $_SESSION['uid']);
+        $userInfo = \json_decode($userInfo, true);
+        if (!empty($userInfo)) {
+            $userInfo['status'] = $status;
+            $redis->hSet('user_info', $_SESSION['uid'], \json_encode($userInfo));
+            $result = ['code' => 0, 'data' => 1, 'msg' => ''];
         }
 
         $this->getResponse()->json($result)->send();
@@ -162,6 +136,7 @@ class AjOp extends Controller
     public function uploadFile()
     {
         $file = $this->getRequest()->getFile('file');
+
         if (!empty($file) && isset($file['tmp_name'])) {
             $ext = strrchr($file['name'], '.');
             $config = Application::app()->getConfig();

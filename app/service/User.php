@@ -66,7 +66,7 @@ class User extends Base
                     'avatar'      => static::$icons[0]
                 ]);
             } catch (\Exception $e) {
-                Logger::error(date('Y/md/') . __METHOD__ . '.log', $e->getMessage()
+                Logger::error(__METHOD__ . '.log', $e->getMessage()
                     . "\n" . $e->getTraceAsString());
                 return false;
             }
