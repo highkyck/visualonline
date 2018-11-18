@@ -41,7 +41,7 @@ services:
       - ./data/logs/php:/data/logs/php
       - ./data/logs/scripts:/data/logs/scripts
     ports:
-      - 9095:9095
+      - 9095
     command: php /data/projects/visualonline/bin/main -c /data/projects/visualonline/conf/config.dev.php
   php72:
     container_name: php72
