@@ -5,7 +5,12 @@ use lib\storage\Redis;
 
 define('APP_PATH', realpath(__DIR__ . '/../') . '/');
 require APP_PATH . 'vendor/autoload.php';
-$config = require APP_PATH . 'conf/config.php';
+
+if (isset($argv[1]) && $argv[1] == "-c" && isset($argv[2])) {
+    $config = require $argv[2];
+} else {
+    $config = require APP_PATH . 'conf/config.php';
+}
 
 spl_autoload_register(function ($className) use ($config) {
     $classPath = $config['app_directory'] . DIRECTORY_SEPARATOR . str_replace('\\', DIRECTORY_SEPARATOR,

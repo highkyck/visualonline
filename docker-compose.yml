@@ -1,0 +1,83 @@
+version: "3"
+services:
+  percona:
+    container_name: percona
+    image: percona
+    restart: always
+    environment:
+      MYSQL_RANDOM_ROOT_PASSWORD: 123456
+      MYSQL_DATABASE: im
+      MYSQL_USER: im
+      MYSQL_PASSWORD: im
+    volumes:
+      - ./im.sql:/docker-entrypoint-initdb.d/im.sql
+      - ./data/mysql:/var/lib/mysql
+    networks:
+      - backend
+    ports:
+      - 3306:3306
+  redis:
+    container_name: redis
+    image: redis
+    restart: always
+    networks:
+      - backend
+    ports:
+      - 6379:6379
+  im_server:
+    container_name: im_server
+    image: liubang/php72-cli
+    hostname: im_server
+    networks:
+      - backend
+    depends_on:
+      - percona
+      - redis
+    links:
+      - percona
+      - redis
+    volumes:
+      - ./../visualonline:/data/projects/visualonline
+      - ./data/logs/php:/data/logs/php
+      - ./data/logs/scripts:/data/logs/scripts
+    ports:
+      - 9095:9095
+    command: php /data/projects/visualonline/bin/main -c /data/projects/visualonline/conf/config.dev.php
+  php72:
+    container_name: php72
+    image: liubang/php72
+    hostname: php72
+    environment:
+      PHP_ENV: dev
+    networks:
+      - backend
+    links:
+      - percona
+      - redis
+    depends_on:
+      - im_server
+    volumes:
+      - ./../visualonline:/data/projects/visualonline
+      - ./data/logs/php:/data/logs/php
+      - ./data/logs/scripts:/data/logs/scripts
+    ports:
+      - 9000
+  openresty:
+    container_name: openresty
+    image: liubang/openresty
+    hostname: openresty
+    networks:
+      - backend
+    depends_on:
+      - php72
+      - im_server
+    volumes:
+      - ./../visualonline:/data/projects/visualonline
+      - ./data/conf/nginx/nginx.conf:/usr/local/openresty/nginx/conf/nginx.conf
+      - ./data/conf/nginx/im.iliubang.cn.conf:/usr/local/openresty/nginx/conf/vhosts/im.iliubang.cn.conf
+      - ./data/conf/nginx/ws.im.iliubang.cn.conf:/usr/local/openresty/nginx/conf/vhosts/ws.im.iliubang.cn.conf
+      - ./data/logs/nginx:/data/logs/nginx
+    ports:
+      - 80:80
+networks:
+  backend:

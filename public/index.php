@@ -7,7 +7,13 @@ error_reporting(E_ERROR & ~E_NOTICE);
 define('APP_PATH', realpath(__DIR__ . '/../') . '/');
 define("SALT", "BIGBANG_WEBIM");
 
-$config = require APP_PATH . '/conf/config.php';
+$env = getenv('PHP_ENV');
+if (false !== $env && $env === 'dev') {
+    $config = require APP_PATH . '/conf/config.dev.php';
+} else {
+    $config = require APP_PATH . '/conf/config.php';
+}
+
 $app = new Application($config);
 $app->init([
     \boot\Composer::class,
